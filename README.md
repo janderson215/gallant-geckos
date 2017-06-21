@@ -1,13 +1,13 @@
-# Project Name
+# Meet with Others / Find Central Command / name TBD
 
-> Pithy project description
+> Input locations between people or interesting places and this app will find a mid-point between all of them. 
 
 ## Team
 
-  - teamMember
-  - teamMember
-  - teamMember
-  - teamMember
+  - Jeffrey Sun
+  - Jon Anderson
+  - Paul Dockery
+  - Wilson Cen
 
 ## Table of Contents
 
