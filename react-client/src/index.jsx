@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-
+import Mwf from './components/MeetWithFriendsForm.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,6 +17,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Midpoint</h1>
+        <Mwf />
       </div>
     );
   }
