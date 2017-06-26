@@ -8,8 +8,13 @@
     "node": ">=6.4.0"
   },
   "scripts": {
+    "start": "nodemon server/index.js",
+    "react-dev": "webpack -d --watch"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "jquery": "^3.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
