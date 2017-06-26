@@ -11,7 +11,7 @@ app.use( bodyParser.urlencoded({ extended: true }) );
 // app.use(express.static(__dirname + '/../react-client/dist'));
 
 app.get('/', function(req, res) {
-  res.send('hello world')
+  res.send('hello world!')
 });
 
 
