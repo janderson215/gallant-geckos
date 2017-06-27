@@ -45,10 +45,9 @@ class AddressSet extends React.Component {
 
 
   handleSubmit(event) {
-    alert(`Hello, you submitted ${this.state.value}`);
+    // alert(`Hello, you submitted ${this.state.value}`);
     // need this line to below to pass the value from the input to the index file so that it can be used there
-
-    this.props.onSubmit(this.state.address);
+    this.props.onSubmit(this.state.value);
     event.preventDefault(); 
 
   }
@@ -58,7 +57,7 @@ class AddressSet extends React.Component {
     for (var i = 0; i < this.state.count; i++) {
       formItems.push(
         <div key={i}>
-          <input type="text" value={this.state.value[i] || ''} onChange={this.handleAddressChange.bind(this, i)} />
+          <input type="text" value={this.state.value[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />
           <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
         </div>
       );

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import LocationsEntrySet from './components/LocationsEntrySet.js';
+import LocationsEntrySet from './components/LocationsEntrySet.jsx';
 
 // import more components such as templates
 
