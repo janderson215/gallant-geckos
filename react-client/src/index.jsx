@@ -15,7 +15,8 @@ class App extends React.Component {
 
 
   submit(values) {
-    
+    console.log(`the client has submitted "${values}"`);
+
   }
   // have another event listener for the submit address in here
 
@@ -24,7 +25,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Midpoint</h1>
-        <Mwf onSubmit={}/>
+        <Mwf onSubmit={this.submit.bind(this)}/>
       </div>
     );
   }

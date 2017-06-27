@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
 class Mwf extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +24,7 @@ class Mwf extends React.Component {
     // alert(`Hello, you submitted ${this.state.value}`);
     // need this line to below to pass the value from the input to the index file so that it can be used there
     console.log('submitting address(es) to the server');
-    this.props.onSearch(this.state.value);
+    this.props.onSubmit(this.state.value);
     event.preventDefault(); 
     this.setState({
       value: '',
