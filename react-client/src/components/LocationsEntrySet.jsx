@@ -8,16 +8,21 @@ class AddressSet extends React.Component {
     super(props);
     this.state = {
       // hold the divs in here and render as we add them to this
-      locations: [LocationEntry, LocationEntry]
+      address: '',
+      locations: []
     };
 
-    this.handleAddressChange = this.handleAddressChange.bind(this);
+    // add binding for handleAddAddress in the field below
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAddAddress = this.handleAddAddress.bind(this);
   }
 
-  handleAddAddress() {
+  handleAddAddress(index, event) {
     console.log('adding another address input field');
+    const value = event.target.value;
+
+
+    
     const locations = this.state.locations.concat(LocationEntry);
     this.setState({locations});
     console.log(this.state.locations);
@@ -25,10 +30,13 @@ class AddressSet extends React.Component {
 
   handleAddressChange(event) {
     this.setState({
-      address: event.target.value
+      addresses: event.target.value
     });
     console.log(this.state.address);
-    
+    this.props.onChange(index, {...this.props.locations[index], address: value});
+
+
+
   }
 
 
@@ -36,21 +44,21 @@ class AddressSet extends React.Component {
     // alert(`Hello, you submitted ${this.state.value}`);
     // need this line to below to pass the value from the input to the index file so that it can be used there
     console.log('submitting addresses to the server');
-    this.props.onSubmit(this.state.address);
+    this.props.onSubmit(this.state.addresses);
     event.preventDefault(); 
+
+    
     // this.setState({
     //   value: '',
     //   addresses: []
     // });
-
-    // eventually make an ajax request here
   }
 
 
   render() {
     const locations = this.state.locations.map((AddressBar, index) => {
       // AddressBar must be capital letter first (for whatever reason)
-      return <AddressBar key={index} index={index} />;
+      return <AddressBar key={index} index={index} onChnage={this.handleAddressChange} />;
     });
     return (
       <div>

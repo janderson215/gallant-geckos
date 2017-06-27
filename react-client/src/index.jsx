@@ -14,18 +14,18 @@ class App extends React.Component {
   }
 
 
-  submit (values) {
+  handleSubmit (values) {
     console.log(`the client has submitted "${values}"`);
 
   }
-  // have another event listener for the submit address in here
+
 
   render () {
     console.log('RENDERINGGG');
     return (
       <div>
         <h1>Midpoint</h1>
-        <LocationsEntrySet onSubmit={this.submit.bind(this)}/>
+        <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
       </div>
     );
   }
