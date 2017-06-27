@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import LocationsEntrySet from './components/LocationsEntrySet.jsx';
+import LocationsEntrySet from './components/LocationsEntryForm.jsx';
 
 // import more components such as templates
 
@@ -9,14 +9,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      locations: []
+
     };
   }
 
 
-  handleSubmit (values) {
-    console.log(`the client has submitted "${values}"`);
+  handleSubmit (data) {
+    console.log(`the client has submitted "${JSON.stringify(data)}"`);
 
+    // make ajax calls
+    $.ajax({
+      url: '/addresses',
+      method: 'POST',
+      data: data
+      
+    });
   }
 
 
