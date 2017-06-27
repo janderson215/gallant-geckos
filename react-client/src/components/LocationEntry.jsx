@@ -1,14 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class LocationEntry extends React.Component {
-  render() {
-    return (
-    <div> 
-      <input type="text" placeholder="Address" /> <br/>
-    </div>
-    );
-  }
-}
+const LocationEntry = (props) => (
+  <div> 
+    <input type="text" name={props.index} placeholder="Address" onChange={props.onChange}/> <br/>
+  </div>
+);
 
 export default LocationEntry;
