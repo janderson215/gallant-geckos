@@ -7,13 +7,19 @@ class AddressSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      address: '',
+      // hold the divs in here and render as we add them to this
       locations: []
     };
 
     this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAddAddress = this.handleAddAddress.bind(this);
+  }
+
+  handleAddAddress() {
+    console.log('adding another address input field');
+    const locations = this.state.locations.concat(LocationEntry);
+    this.setState({locations});
   }
 
   handleAddressChange(event) {
@@ -23,6 +29,7 @@ class AddressSet extends React.Component {
     console.log(this.state.address);
     
   }
+
 
   handleSubmit(event) {
     // alert(`Hello, you submitted ${this.state.value}`);
@@ -34,22 +41,26 @@ class AddressSet extends React.Component {
     //   value: '',
     //   addresses: []
     // });
+
+    // eventually make an ajax request here
   }
 
-  handleAddAddress() {
-    console.log('adding another address input field');
-    const locations = this.state.locations.concat(AddressInput);
-    this.setState({locations});
-  }
 
   render() {
+    const locations = this.state.locations.map((Element, index) => {
+      return <Element key={index} index={index} />;
+    });
     return (
       <div>
-      <button onClick={this.add}>Add Additional Location</button>
+      <button onClick={this.handleAddAddress}>Add Additional Location</button>
       <form onSubmit={this.handleSubmit}>
         <label>
           Address:
-          <input type="text" value={this.state.value} onChange={this.handleAddressChange} />
+          {/*<LocationEntry value={this.state.value} onChange={this.handleAddressChange} />*/}
+          <div className="inputs">
+            { locations }
+            </div>
+          {/*<input type="text" value={this.state.value} onChange={this.handleAddressChange} />*/}
         </label>
         <input type="submit" value="Submit" />
       </form>
