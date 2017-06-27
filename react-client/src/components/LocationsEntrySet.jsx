@@ -8,7 +8,7 @@ class AddressSet extends React.Component {
     super(props);
     this.state = {
       // hold the divs in here and render as we add them to this
-      locations: []
+      locations: [LocationEntry, LocationEntry]
     };
 
     this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -20,6 +20,7 @@ class AddressSet extends React.Component {
     console.log('adding another address input field');
     const locations = this.state.locations.concat(LocationEntry);
     this.setState({locations});
+    console.log(this.state.locations);
   }
 
   handleAddressChange(event) {
@@ -47,8 +48,9 @@ class AddressSet extends React.Component {
 
 
   render() {
-    const locations = this.state.locations.map((Element, index) => {
-      return <Element key={index} index={index} />;
+    const locations = this.state.locations.map((AddressBar, index) => {
+      // AddressBar must be capital letter first (for whatever reason)
+      return <AddressBar key={index} index={index} />;
     });
     return (
       <div>

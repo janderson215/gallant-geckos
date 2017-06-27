@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class AddressInput extends React.Component {
+class LocationEntry extends React.Component {
   render() {
     return (
     <div> 
-      <input type="text" placeholder="Address ${this.state.locations.length}" /> <br/>
-
+      <input type="text" placeholder="Address" /> <br/>
     </div>
     );
   }
 }
 
-export default AddressInput;
+export default LocationEntry;
