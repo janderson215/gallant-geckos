@@ -21,8 +21,15 @@ class App extends React.Component {
     $.ajax({
       url: '/addresses',
       method: 'POST',
-      data: data
-      
+      data: data,
+      error: function(err) {
+        console.log(err);
+      },
+      success: function(data) {
+        if (data) {
+          console.log(data);
+        }
+      }
     });
   }
 
