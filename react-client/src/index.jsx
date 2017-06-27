@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import Mwf from './components/MeetWithFriendsForm.jsx';
+import LocationsEntrySet from './components/LocationsEntrySet.jsx';
 
 // import more components such as templates
 
@@ -14,7 +14,7 @@ class App extends React.Component {
   }
 
 
-  submit(values) {
+  submit (values) {
     console.log(`the client has submitted "${values}"`);
 
   }
@@ -25,7 +25,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Midpoint</h1>
-        <Mwf onSubmit={this.submit.bind(this)}/>
+        <LocationsEntrySet onSubmit={this.submit.bind(this)}/>
       </div>
     );
   }
