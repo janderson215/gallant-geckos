@@ -30,6 +30,7 @@ class AddressSet extends React.Component {
 
   handleRemoveAddress(index) {
     let locations = this.state.locations.slice();
+    console.log(`idx: ${index} value: ${locations[index]}`);`
     locations.splice(index, 1);
     this.setState({
       count: this.state.count - 1,
@@ -37,14 +38,14 @@ class AddressSet extends React.Component {
     });
   }
 
-  handleAddressChange(i, event) {
+  handleAddressChange(i, value) {
+    console.log(`i ${i} e ${value}`);
     let locations = this.state.locations.slice();
-    locations[i] = event.target.value;
+    locations[i] = value;
     this.setState({
       locations
     });
   }
-
 
   handleSubmit(event) {
     // alert(`Hello, you submitted ${this.state.value}`);
@@ -57,10 +58,16 @@ class AddressSet extends React.Component {
     event.preventDefault(); 
   }
 
-
+  onSuggestSelect(i, suggest) {
+    // console.log(`${i} ${suggest.label}`);
+    let locations = this.state.locations.slice();
+    locations[i] = suggest.label;
+    this.setState({
+      locations
+    });
+  }
 
   createForm() {
- 
     let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
       formItems.push(
@@ -73,6 +80,16 @@ class AddressSet extends React.Component {
            />
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
 
+          <Geosuggest
+            placeholder={`Address #${i + 1}`}
+            ref={el => this._geoSuggest = el}
+            onChange={this.handleAddressChange.bind(this, i)}
+            onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+            initialValue={this.state.locations[i] || ''}
+          />
+          <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
+          {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
+
         </div>
       );
     }
@@ -82,7 +99,7 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <span>{this.createForm()}</span>
+        {this.createForm()}
         <input type="button" value="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <div>{'\n'}</div>
         <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
