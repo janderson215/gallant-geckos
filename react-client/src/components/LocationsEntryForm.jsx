@@ -77,7 +77,6 @@ class AddressSet extends React.Component {
             ref={el => this._geoSuggest = el}
             onChange={this.handleAddressChange.bind(this, i)}
             onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-            // need to include a way to be identified to the index
             initialValue={this.state.locations[i] || ''}
           />
           <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
