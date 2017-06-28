@@ -31,4 +31,7 @@ db/data/
 node_modules/
 bower_components/
 
+# Package Blocker
+package-lock.json
+
 react-client/src/key.js
