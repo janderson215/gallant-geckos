@@ -20,7 +20,7 @@ coverage
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
-dist/
+react-client/dist/bundle.js
 
 # database files
 db/data/
@@ -31,4 +31,4 @@ db/data/
 node_modules/
 bower_components/
 
-src/key.js
+react-client/src/key.js
