@@ -38,10 +38,10 @@ class AddressSet extends React.Component {
     });
   }
 
-  handleAddressChange(i, event) {
-    console.log(`i ${i} e ${event}`);
+  handleAddressChange(i, value) {
+    console.log(`i ${i} e ${value}`);
     let locations = this.state.locations.slice();
-    locations[i] = event;
+    locations[i] = value;
     this.setState({
       locations
     });
@@ -77,6 +77,8 @@ class AddressSet extends React.Component {
             ref={el => this._geoSuggest = el}
             onChange={this.handleAddressChange.bind(this, i)}
             onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+            value={i}
+
           />
           <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
