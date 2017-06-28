@@ -11,7 +11,7 @@ class AddressSet extends React.Component {
       count: 2,
       activity: '',
     };
-
+    this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -61,25 +61,18 @@ class AddressSet extends React.Component {
 
   createForm() {
  
-    let formItems = [
-      // <div>
-      //     <input type="text" value={this.state.locations[0] || geo.getCurrentPosition(success)} onChange={this.handleAddressChange.bind(this, 0)} placeholder="944 Market St." />
-      //     <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, 0)} />
-      //   </div>
-    ];
+    let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
       formItems.push(
         <div key={i}>
+          <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
           <Geosuggest
             ref={el => this._geoSuggest = el}
-
+            value={this.state.locations[i] || '' }
+            onSuggestSelect={this.onSuggestSelect}
            />
-          {/*<button onClick = { () => this._geoSuggest.focus() } > Focus </button>*/}
-          {/*<button onClick = { () => this._geoSuggest.update() } > Update </button>
-          <button onClick = { () => this._geoSuggest.clear() } > Clear </button>*/}
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
 
-          <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
         </div>
       );
     }
