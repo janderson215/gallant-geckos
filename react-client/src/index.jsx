@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import LocationsEntrySet from './components/LocationsEntryForm.jsx';
 
-
 // import more components such as templates
 
 class App extends React.Component {
