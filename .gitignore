@@ -33,5 +33,6 @@ bower_components/
 
 # APIs
 keys.js
+react-client/key.js
 
 .DS_Store
