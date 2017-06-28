@@ -16,7 +16,7 @@ app.get('/', function(req, res) {
 let addresses = [];
 let geocodedAddresses = [];
 let currentMidpoint;
-let radius = 5000;
+let radius = 50000;
 let type = 'restaurant';
 let pointsOfInterest;
 let address;
@@ -36,76 +36,81 @@ const photoUrlPrefix = `https://maps.googleapis.com/maps/api/place/photo?maxwidt
 
 app.post('/addresses', (req, res) => {
   //set addresses equal to request body
-  console.log('rep.body.addresses', req.body.addresses)
   let addresses = req.body.addresses;
   //for each local address
-  addresses.forEach(address => {
+  new Promise((resolve, reject) => {
+    addresses.forEach(address => {
     //format address for GET request
-    address = address.split(' ').join('+');
-    let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
-    //GET request to Google Geocoding API
-    rp(geocodingUrl)
-    //push response into global addresses array
-    .then(geocodedObject => {
-      geocodedAddresses.push([(JSON.parse(geocodedObject).results[0].geometry.location.lat),
-        (JSON.parse(geocodedObject).results[0].geometry.location.lng)]); //fix floating point
-    })
-    .then(() => {
-      //for each global address
-      console.log('supposed to be lat', geocodedAddresses)
-        //add lat to local latSum
-      console.log('*******lat', geocodedAddresses[geocodedAddresses.length-1][0])
-      console.log('*******lng', geocodedAddress[geocodedAddresses.length-1][1])
-      latSum += Number(geocodedAddress[geocodedAddresses.length-1][0])//.toFixed(7))*10000000;
+      address = address.split(' ').join('+');
+      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
+      //GET request to Google Geocoding API
+      rp(geocodingUrl)
+      //push response into global addresses array
+      .then(geocodedObject => {
+        geocodedAddresses.push([(JSON.parse(geocodedObject).results[0].geometry.location.lat),
+          (JSON.parse(geocodedObject).results[0].geometry.location.lng)]);
+          if (geocodedAddresses.length === addresses.length) {
+            resolve();
+          }
+      });
+    });
+  })
+  .then(() => {
+    //for each global address
+    console.log('supposed to be lat', geocodedAddresses)
+    geocodedAddresses.forEach(geocodedAddress => {
+      //add lat to local latSum
+      latSum += Number(geocodedAddress[0]);
       //add long to local longSum
-      lngSum += Number(geocodedAddress[geocodedAddresses.length-1][1])//.toFixed(7))*10000000;
-      console.log('latSum', latSum);
-      console.log('lngSum', lngSum);
-      //set global currentMidpoint = 'latSum/# of addresses,lngSum/# of addresses'
-      currentMidpoint = [((latSum/addresses.length.toFixed(7))),((lngSum/addresses.length.toFixed(7)))];
-      console.log('lat', currentMidpoint[0])
-      nearbyRequestSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
-    })
-    //GET request to Google Places API passing LatLng, radius and type of place
+      lngSum += Number(geocodedAddress[1]);
+    });
+    console.log('latSum', latSum);
+    console.log('lngSum', lngSum);
+    //set global currentMidpoint = 'latSum/# of addresses,lngSum/# of addresses'
+    currentMidpoint = [(latSum/addresses.length).toFixed(7),(lngSum/addresses.length.toFixed(7))];
+    console.log('lat', currentMidpoint[0])
+    nearbyRequestSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`
+  })
+  //GET request to Google Places API passing LatLng, radius and type of place
+  .then(() => {
+    let nearbySearch = nearbyRequestPrefix.concat(nearbyRequestSuffix);
+    console.log('nearbySearch string', nearbySearch);
+    rp(nearbySearch)
+    .then((responseObject => {
+      //set global pointsOfInterest to results array returned from Google Places call
+      console.log('responseObject', responseObject);
+      pointsOfInterest = JSON.parse(responseObject).results;
+      // console.log('pointsOfInterest', pointsOfInterest)
+    }))
     .then(() => {
-      let nearbySearch = nearbyRequestPrefix.concat(nearbyRequestSuffix);
-      console.log('nearbySearch string', nearbySearch);
-      rp(nearbySearch)
-      .then((responseObject => {
-        //set global pointsOfInterest to results array returned from Google Places call
-        console.log('responseObject', responseObject);
-        pointsOfInterest = JSON.parse(responseObject).results;
-        console.log('pointsOfInterest', pointsOfInterest)
-      }))
-      .then(() => {
-        //iterate through pointsOfInterest
-        pointsOfInterest.forEach(pointOfInterest => {
-          //set local coords var = geometry.location.lat, geometry.location.lng
-          let coords = `${geometry.location.lat},${geometry.location.lng}`
-          let reverseGeocodingSearchSuffix = `${coords}&key=${googleAPIkey}`
-          //GET request to REVERSE_GEOCODING_SEARCH
-          rp(reverseGeocodingSearchPrefix + reverseGeocodingSearchSuffix)
-          //*then* promise
-          .then(() => {
-            //set photos.photo_reference equal to photo url prefix + photos.photo_reference + &key=APIKEY
-            let photoUrlSuffix = photos.photo_reference;
-            pointOfInterest.photos.photo_reference = photoUrlPrefix + photoUrlSuffix;
-          })
-        })
-      })
-      .then(() => {
-        rp('http://localhost:3000/pointsOfInterest')
-        .then(() => {
-          res.status(201).send();
-        })
+      //iterate through pointsOfInterest
+      pointsOfInterest.forEach(pointOfInterest => {
+        //set local coords var = geometry.location.lat, geometry.location.lng
+        let coords = `${geometry.location.lat},${geometry.location.lng}`
+        let reverseGeocodingSearchSuffix = `${coords}&key=${googleAPIkey}`
+        //GET request to REVERSE_GEOCODING_SEARCH
+        rp(reverseGeocodingSearchPrefix.concat(reverseGeocodingSearchSuffix))
+        //*then* promise
+        .then((reverseGeocodedObject) => {
+          //set address = results
+          pointOfInterest.address = results.formatted_address;
+        });
+        //set photos.photo_reference equal to photo url prefix + photos.photo_reference + &key=APIKEY
+        let photoUrlSuffix = photos.photo_reference;
+        pointOfInterest.photos.photo_reference = photoUrlPrefix.concat(photoUrlSuffix);
       })
     })
-    //send POST response 
+    .then(() => {
+      rp('http://localhost:3000/pointsOfInterest')
+      .then(() => {
+        //send POST response 
+        res.status(201).send();
+      })
+    })
     .catch(err => console.log(err));
   });
-  
-  //front end must have promise with a get request immediately following response
 });
+
 
 app.get('/pointsOfInterest', (req, res) => {
   res.status(200).send(pointsOfInterest);
