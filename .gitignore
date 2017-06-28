@@ -20,7 +20,7 @@ coverage
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
-dist/
+react-client/dist/bundle.js
 
 # database files
 db/data/
@@ -31,7 +31,4 @@ db/data/
 node_modules/
 bower_components/
 
-<<<<<<< HEAD
-=======
-react-client/key.js
->>>>>>> Added styling to get the GeoSuggest to work properly
+react-client/src/key.js
