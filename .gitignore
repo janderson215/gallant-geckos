@@ -20,7 +20,7 @@ coverage
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
-dist/bundle.js
+dist/
 
 # database files
 db/data/
@@ -31,3 +31,4 @@ db/data/
 node_modules/
 bower_components/
 
+src/key.js
