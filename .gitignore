@@ -31,3 +31,7 @@ db/data/
 node_modules/
 bower_components/
 
+<<<<<<< HEAD
+=======
+react-client/key.js
+>>>>>>> Added styling to get the GeoSuggest to work properly
