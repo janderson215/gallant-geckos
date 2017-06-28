@@ -1,9 +1,9 @@
 {
-  "name": "",
+  "name": "midpoint",
   "version": "",
   "description": "",
-  "author": "",
-  "license": "",
+  "author": "Gallant sGeckos",
+  "license": "MIT",
   "engines": {
     "node": ">=6.4.0"
   },
@@ -20,7 +20,8 @@
     "express": "^4.15.3",
     "jquery": "^3.2.1",
     "mocha": "^3.4.2",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -34,5 +35,9 @@
     "presets": [
       "es2015"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gallant-geckos/gallant-geckos.git"
   }
 }
