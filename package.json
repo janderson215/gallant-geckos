@@ -13,7 +13,7 @@
     "react-dev": "webpack -d --watch",
     "test": "./node_modules/.bin/mocha",
     "server-dev": "nodemon server/index.js",
-    "postinstall": "webpack"
+    "postinstall": "webpack -d"
   },
   "dependencies": {
     "mongoose": "^4.10.8",
@@ -35,9 +35,9 @@
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.7.2",
     "chai": "^4.0.2",
+    "css-loader": "^0.28.4",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "mocha": "^3.4.2",
-    "css-loader": "^0.28.4",
     "style-loader": "^0.18.2",
     "webpack": "^3.0.0"
   },
