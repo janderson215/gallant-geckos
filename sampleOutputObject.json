@@ -1,6 +1,5 @@
 [
  {
-    "address" : "Darling Dr, Sydney NSW 2000, Australia",
     "geometry" : {
       "location" : {
         "lat" : -33.870775,
@@ -35,7 +34,6 @@
     "vicinity" : "Pyrmont Bay Wharf Darling Dr, Sydney"
   },
   {
-  "address" : "32 The Promenade, Sydney NSW 2000, Australia",
   "geometry" : {
     "location" : {
      "lat" : -33.866891,
