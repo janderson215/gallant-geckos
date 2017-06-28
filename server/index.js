@@ -36,6 +36,7 @@ const photoUrlPrefix = `https://maps.googleapis.com/maps/api/place/photo?maxwidt
 
 app.post('/addresses', (req, res) => {
   //set addresses equal to request body
+  console.log('rep.body.addresses', req.body.addresses)
   let addresses = req.body.addresses;
   //for each local address
   addresses.forEach(address => {
@@ -52,17 +53,16 @@ app.post('/addresses', (req, res) => {
     .then(() => {
       //for each global address
       console.log('supposed to be lat', geocodedAddresses)
-      geocodedAddresses.forEach(geocodedAddress => {
         //add lat to local latSum
-        console.log('*******', geocodedAddress[0])
-        latSum += Number(geocodedAddress[0]).toFixed(7)*1000000;
-        //add long to local longSum
-        lngSum += Number(geocodedAddress[1]).toFixed(7)*1000000;
-      });
+      console.log('*******lat', geocodedAddresses[geocodedAddresses.length-1][0])
+      console.log('*******lng', geocodedAddress[geocodedAddresses.length-1][1])
+      latSum += Number(geocodedAddress[geocodedAddresses.length-1][0])//.toFixed(7))*10000000;
+      //add long to local longSum
+      lngSum += Number(geocodedAddress[geocodedAddresses.length-1][1])//.toFixed(7))*10000000;
       console.log('latSum', latSum);
       console.log('lngSum', lngSum);
       //set global currentMidpoint = 'latSum/# of addresses,lngSum/# of addresses'
-      currentMidpoint = [((latSum/addresses.length)/1000000).toFixed(7),((lngSum/addresses.length)/1000000).toFixed(7)];
+      currentMidpoint = [((latSum/addresses.length.toFixed(7))),((lngSum/addresses.length.toFixed(7)))];
       console.log('lat', currentMidpoint[0])
       nearbyRequestSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
     })
