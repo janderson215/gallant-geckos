@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import LocationEntry from './LocationEntry.jsx';
-
+import Geosuggest from 'react-geosuggest';
+import styles from '../geosuggest.css';
 
 class AddressSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       locations: [],
-      count: 1,
+      count: 2,
       activity: '',
     };
 
@@ -55,26 +55,41 @@ class AddressSet extends React.Component {
     };
     this.props.onSubmit(data);
     event.preventDefault(); 
-
   }
 
+
+
   createForm() {
-    let formItems = [];
+ 
+    let formItems = [
+      // <div>
+      //     <input type="text" value={this.state.locations[0] || geo.getCurrentPosition(success)} onChange={this.handleAddressChange.bind(this, 0)} placeholder="944 Market St." />
+      //     <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, 0)} />
+      //   </div>
+    ];
     for (var i = 0; i < this.state.count; i++) {
       formItems.push(
         <div key={i}>
-          <input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />
+          <Geosuggest
+            ref={el => this._geoSuggest = el}
+
+           />
+          {/*<button onClick = { () => this._geoSuggest.focus() } > Focus </button>*/}
+          {/*<button onClick = { () => this._geoSuggest.update() } > Update </button>
+          <button onClick = { () => this._geoSuggest.clear() } > Clear </button>*/}
+          {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
+
           <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
         </div>
       );
     }
-    return formItems || null;
+    return formItems;
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        {this.createForm()}
+        <span>{this.createForm()}</span>
         <input type="button" value="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <div>{'\n'}</div>
         <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
