@@ -29,8 +29,8 @@ class AddressSet extends React.Component {
   }
 
   handleRemoveAddress(index) {
-    console.log(index);
     let locations = this.state.locations.slice();
+    console.log(`idx: ${index} value: ${locations[index]}`);
     locations.splice(index, 1);
     this.setState({
       count: this.state.count - 1,
@@ -77,8 +77,8 @@ class AddressSet extends React.Component {
             ref={el => this._geoSuggest = el}
             onChange={this.handleAddressChange.bind(this, i)}
             onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-            value={i}
-
+            // need to include a way to be identified to the index
+            initialValue={this.state.locations[i] || ''}
           />
           <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
