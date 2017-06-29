@@ -34,4 +34,8 @@ bower_components/
 # Package Blocker
 package-lock.json
 
+# APIs
+keys.js
 react-client/src/key.js
+
+.DS_Store
