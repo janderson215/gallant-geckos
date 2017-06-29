@@ -27,6 +27,7 @@
     "react-dom": "^15.6.1",
     "react-geosuggest": "^2.3.4",
     "react-iframe": "^1.0.7",
+    "react-tap-event-plugin": "^2.0.1",
     "request": "^2.81.0"
   },
   "devDependencies": {
