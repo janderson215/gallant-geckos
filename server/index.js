@@ -11,7 +11,7 @@ app.get('/', function(req, res) {
 });
 
 app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port [TODO]", this.address().port, app.settings.env);
+  console.log("Express server listening on port " + app.get('port'), this.address().port, app.settings.env);
 });
 
 // app.listen(3000, function() {
