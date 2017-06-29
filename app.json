@@ -1,0 +1,18 @@
+{
+  "name": "gallant-geckos",
+  "description": "Enables app review instances from pull request",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
