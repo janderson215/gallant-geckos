@@ -14,14 +14,17 @@ class App extends React.Component {
     };
   }
 
-  handleDummyData() {
-    let data = dummy[0].iframe.slice(12, (dummy[0].length - 10));
-    return data;
+  handleServerResponse() {
+    let data = dummy[0].iframe.toString();
+    console.log(data);
+    let url = data.slice(13, (data.length - 11));
+    console.log(`https:${url}`);
+    return `https:${url}`;
   }
 
   handleSubmit (data) {
     console.log(`the client has submitted "${JSON.stringify(data)}"`);
-
+    console.log('hello' + this.handleDummyData());
     // make ajax calls
     $.ajax({
       url: '/addresses',
@@ -45,7 +48,7 @@ class App extends React.Component {
       <div>
         <h1>Midpoint</h1>
         <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-        <Iframe url="http://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0"
+        <Iframe url={this.handleDummyData()}
           width="450px"
           height="450px"
           display="initial"
