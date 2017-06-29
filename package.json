@@ -29,7 +29,8 @@
     "react-geosuggest": "^2.3.4",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
-    "react-iframe": "^1.0.7"
+    "react-iframe": "^1.0.7",
+    "react-tap-event-plugin": "^2.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -39,7 +40,6 @@
     "babel-preset-stage-1": "^6.24.1",
     "babel-register": "^6.7.2",
     "babel-loader": "^7.1.0",
-    "body-parser": "^1.17.2",
     "chai": "^4.0.2",
     "css-loader": "^0.28.4",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
