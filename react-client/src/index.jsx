@@ -26,10 +26,9 @@ class App extends React.Component {
     return `https:${url}`;
   }
 
-
   handleSubmit (data) {
     console.log(`the client has submitted "${JSON.stringify(data)}"`);
-
+    console.log('hello' + this.handleDummyData());
     // make ajax calls
     $.ajax({
       url: '/addresses',
