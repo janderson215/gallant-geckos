@@ -88,7 +88,7 @@ class AddressSet extends React.Component {
             onSuggestSelect={this.onSuggestSelect.bind(this, i)}
             initialValue={this.state.locations[i] || ''}
           />
-          <RaisedButton label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
+          <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
 
         </div>

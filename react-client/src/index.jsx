@@ -7,8 +7,8 @@ import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
+// import BottomNavigation from 'material-ui/BottomNavigation';
 
-// import more components such as templates
 
 class App extends React.Component {
   constructor(props) {
