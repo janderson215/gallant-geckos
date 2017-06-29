@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
-const googleAPIkey = require('../keys.js').googleAPIkey;
+const googleAPIkey = require('../react-client/src/key.js').googleAPIkey;
 
 const app = express();
 
