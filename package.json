@@ -15,16 +15,19 @@
     "server-dev": "nodemon server/index.js"
   },
   "dependencies": {
-    "mongoose": "^4.10.8",
     "body-parser": "^1.17.2",
     "chai": "^4.0.2",
     "express": "^4.15.3",
+    "google-maps-react": "^1.0.19",
     "jquery": "^3.2.1",
+    "material-ui": "^0.18.5",
     "mocha": "^3.4.2",
-    "request": "^2.81.0",
+    "mongoose": "^4.10.8",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-geosuggest": "^2.3.4"
+    "react-geosuggest": "^2.3.4",
+    "react-iframe": "^1.0.7",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
