@@ -43,10 +43,6 @@
     "chai": "^4.0.2",
     "css-loader": "^0.28.4",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
-<<<<<<< HEAD
-=======
-    "chai": "^4.0.2",
->>>>>>> (styling) Added some Material UI components
     "mocha": "^3.4.2",
     "style-loader": "^0.18.2",
     "webpack": "^3.0.0"
