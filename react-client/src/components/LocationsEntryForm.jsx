@@ -68,23 +68,43 @@ class AddressSet extends React.Component {
     });
   }
 
+  createGeosuggest(i) {
+    return (
+      <Geosuggest
+        placeholder={`Address #${i + 1}`}
+        ref={el => this._geoSuggest = el}
+        onChange={this.handleAddressChange.bind(this, i)}
+        onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+        initialValue={this.state.locations[i] || ''}
+      />
+    );
+  }
+
+  createRemoveFieldButton(i) {
+    return (
+      <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
+    );
+  }
+
   createForm() {
     let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
-      formItems.push(
-        <div key={i}>
-          <Geosuggest
-            placeholder={`Address #${i + 1}`}
-            ref={el => this._geoSuggest = el}
-            onChange={this.handleAddressChange.bind(this, i)}
-            onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-            initialValue={this.state.locations[i] || ''}
-          />
-          <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
-          {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
+      if (i < 2) {
+        formItems.push(
+          <div key={i}>
+            {this.createGeosuggest(i)}
+            {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
 
-        </div>
-      );
+          </div>
+        );
+      } else {
+        formItems.push(
+          <div key={i}>
+            {this.createGeosuggest(i)}
+            {this.createRemoveFieldButton(i)}
+          </div>
+        );
+      }
     }
     return formItems;
   }
