@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Geosuggest from 'react-geosuggest';
 import styles from '../geosuggest.css';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class AddressSet extends React.Component {
   constructor(props) {
@@ -50,12 +51,12 @@ class AddressSet extends React.Component {
   handleSubmit(event) {
     // alert(`Hello, you submitted ${this.state.value}`);
     // need this line to below to pass the value from the input to the index file so that it can be used there
+    event.preventDefault(); 
     var data = {
       locations: this.state.locations,
       activity: this.state.activity
     };
     this.props.onSubmit(data);
-    event.preventDefault(); 
   }
 
   onSuggestSelect(i, suggest) {
@@ -87,7 +88,7 @@ class AddressSet extends React.Component {
             onSuggestSelect={this.onSuggestSelect.bind(this, i)}
             initialValue={this.state.locations[i] || ''}
           />
-          <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
+          <RaisedButton label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
           {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
 
         </div>
@@ -100,10 +101,14 @@ class AddressSet extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}> 
         {this.createForm()}
-        <input type="button" value="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
-        <div>{'\n'}</div>
+        <br></br>
+        <br></br>
+        <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
+        <br></br>
+        <br></br>
         <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
-        <input type="submit" value="Submit" />
+        <RaisedButton type="submit" label="Submit" />
+
       </form>
     );
   }

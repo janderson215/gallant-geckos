@@ -4,6 +4,10 @@ import $ from 'jquery';
 import LocationsEntrySet from './components/LocationsEntryForm.jsx';
 import Iframe from 'react-iframe';
 import dummy from './dummy-data.js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import AppBar from 'material-ui/AppBar';
+
 // import more components such as templates
 
 class App extends React.Component {
@@ -42,16 +46,18 @@ class App extends React.Component {
   render () {
     console.log('RENDERINGGG');
     return (
-      <div>
-        <h1>Midpoint</h1>
-        <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-        <Iframe url="http://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0"
-          width="450px"
-          height="450px"
-          display="initial"
-          position="relative"
-          />
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <AppBar title="Midpoint" />
+            <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
+          <Iframe url={this.handleServerResponse()}
+            width="450px"
+            height="450px"
+            display="initial"
+            position="relative"
+            />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
