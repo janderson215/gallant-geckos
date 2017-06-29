@@ -30,7 +30,7 @@ class AddressSet extends React.Component {
 
   handleRemoveAddress(index) {
     let locations = this.state.locations.slice();
-    console.log(`idx: ${index} value: ${locations[index]}`);`
+    console.log(`idx: ${index} value: ${locations[index]}`);
     locations.splice(index, 1);
     this.setState({
       count: this.state.count - 1,
