@@ -18,13 +18,14 @@ class App extends React.Component {
     };
   }
 
-  handleServerResponse() {
+  handleDummyData() {
     let data = dummy[0].iframe.toString();
     console.log(data);
     let url = data.slice(13, (data.length - 11));
     console.log(`https:${url}`);
     return `https:${url}`;
   }
+
 
   handleSubmit (data) {
     console.log(`the client has submitted "${JSON.stringify(data)}"`);
@@ -53,7 +54,7 @@ class App extends React.Component {
         <div>
           <AppBar title="Midpoint" />
             <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-          <Iframe url={this.handleServerResponse()}
+          <Iframe url={this.handleDummyData()}
             width="450px"
             height="450px"
             display="initial"

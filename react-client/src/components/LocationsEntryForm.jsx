@@ -73,14 +73,6 @@ class AddressSet extends React.Component {
     for (var i = 0; i < this.state.count; i++) {
       formItems.push(
         <div key={i}>
-          <input type="button" value="Remove" onClick={this.handleRemoveAddress.bind(this, i)} />
-          <Geosuggest
-            ref={el => this._geoSuggest = el}
-            value={this.state.locations[i] || '' }
-            onSuggestSelect={this.onSuggestSelect}
-           />
-          {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
-
           <Geosuggest
             placeholder={`Address #${i + 1}`}
             ref={el => this._geoSuggest = el}
