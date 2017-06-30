@@ -13,6 +13,7 @@ class AddressSet extends React.Component {
       phoneNumbers: [],
       count: 2, // starting number of fields
       activity: '',
+      name: ''
     };
     this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
@@ -22,6 +23,12 @@ class AddressSet extends React.Component {
   handleActivityChange(e) {
     this.setState({
       activity: e.target.value
+    });
+  }
+
+  handleNameChange(e) {
+    this.setState({
+      name: e.target.value
     });
   }
 
@@ -76,7 +83,8 @@ class AddressSet extends React.Component {
     }
     var data = {
       activity: this.state.activity,
-      people: people
+      people: people,
+      name: this.state.name
     };
     this.props.onSubmit(data);
   }
@@ -145,13 +153,14 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
+        <input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
         <br></br>
         <br></br>
         <br></br>
         <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
-        <input type="text" className="activityinput" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
+        <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
         <RaisedButton type="submit" label="Submit" />
       </form>
     );
