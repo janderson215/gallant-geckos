@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
-const googleAPIkey = require('../keys.js').googleAPIkey;
+const googleAPIkey = process.env.googleAPIkey;
 
 const app = express();
 
@@ -15,6 +15,7 @@ const iframePrefix = '<iframe src="https://www.google.com/maps/embed/v1/place?q=
 
 let addresses = [];
 let geocodedAddresses = [];
+let phoneNums = [];
 let currentMidpoint;
 let pointsOfInterest;
 let address;
@@ -24,12 +25,13 @@ let lngSum = 0;
 let nearbyRequestSuffix;
 
 app.post('/addresses', (req, res) => {
-  let type = req.body.activity;
-  let addresses = req.body.locations;
+  let type = req.body.type;
+  let people = req.body.people;
   
   let geocodeAddresses = new Promise((resolve, reject) => {
-    addresses.forEach(address => {
-      address = address.split(' ').join('+');
+    people.forEach(person => {
+      phoneNums.push(person.phoneNums);
+      address = person.address.split(' ').join('+');
       let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
       rp(geocodingUrl)
       .then(geocodedObject => {
@@ -61,20 +63,23 @@ app.post('/addresses', (req, res) => {
       });
     })
     .then(() => {
-      rp('http://localhost:3000/pointsOfInterest')
-      .then(() => {
-        res.status(201).send();
-      })
-      .catch(err => console.log(err));
+      // rp('http://localhost:3000/pointsOfInterest')
+      // .then(() => {
+        //save to db here
+        res.status(201).send(pointsOfInterest);
+      // })
+      // .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
   });
 });
 
-app.get('/pointsOfInterest', (req, res) => {
-  console.log(pointsOfInterest);
-  res.status(200).send(pointsOfInterest);
-});
+//Pulling from the DB
+// app.get('/pointsOfInterest', (req, res) => {
+//   console.log(pointsOfInterest);
+//   //find from db
+//   res.status(200).send(pointsOfInterest);
+// });
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port " + this.address().port);
