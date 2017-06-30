@@ -182,15 +182,17 @@ class AddressSet extends React.Component {
       <form onSubmit={this.handleSubmit}> 
         <br></br>
         <TextField hintText="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
-        {/*<input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>*/}
+
         {this.createForm()}
         <br></br>
         <br></br>
         <br></br>
         <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
-        <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
-        <RaisedButton type="submit" label="Submit" />
+        <span>
+          <TextField hintText="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
+          <RaisedButton type="submit" label="Submit" />
+          </span>
       </form>
     );
   }
