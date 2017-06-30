@@ -7,6 +7,9 @@ import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
+import styles from './app.css';
+import Paper from 'material-ui/Paper';
+
 // import BottomNavigation from 'material-ui/BottomNavigation';
 
 
@@ -50,16 +53,18 @@ class App extends React.Component {
     console.log('RENDERINGGG');
     return (
       <MuiThemeProvider>
-        <div>
-          <AppBar title="Midpoint" />
-            <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-          <Iframe url={this.handleDummyData()}
-            width="450px"
-            height="450px"
-            display="initial"
-            position="relative"
-            />
-        </div>
+        <Paper zDepth={1}>
+          <span>
+            <AppBar title="Midpoint" />
+              <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
+              <Iframe url={this.handleDummyData()}
+                width="450px"
+                height="450px"
+                display="initial"
+                position="relative"
+                />
+          </span>
+        </Paper>
       </MuiThemeProvider>
     );
   }
