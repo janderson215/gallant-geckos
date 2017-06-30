@@ -152,18 +152,18 @@ class AddressSet extends React.Component {
     for (var i = 0; i < this.state.count; i++) {
       if (i < 2) {
         formItems.push(
-          <li key={i}>
+          <div key={i}>
             {this.createGeosuggest(i)}
             {this.createPhoneNumberField(i)}
-          </li>
+          </div>
         );
       } else {
         formItems.push(
-          <li key={i}>
+          <div key={i}>
             {this.createGeosuggest(i)}
             {this.createPhoneNumberField(i)}
             {this.createRemoveFieldButton(i)}
-          </li>
+          </div>
         );
       }
     }
