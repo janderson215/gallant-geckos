@@ -82,9 +82,9 @@ class AddressSet extends React.Component {
       });
     }
     var data = {
-      activity: this.state.activity,
+      type: this.state.activity,
       people: people,
-      name: this.state.name
+      initiator: this.state.name
     };
     this.props.onSubmit(data);
   }
