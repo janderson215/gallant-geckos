@@ -9,14 +9,28 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import styles from './app.css';
 import Paper from 'material-ui/Paper';
-// import BottomNavigation from 'material-ui/BottomNavigation';
+import ResultsList from './components/ResultsList.jsx';
+import BottomNavigation from 'material-ui/BottomNavigation';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      iframe: this.handleDummyData()
+      iframe: this.handleDummyData(),
+      recommendedPlaces: dummy,
+      recommendedPlaceIframe: ''
     };
+    this.handleSelectResult = this.handleSelectResult.bind(this);
+  }
+
+  handleSelectResult(recommendedPlaceClicked) {
+    console.log('handleSelectResult invoked, wire state');
+    console.log('clicked on: ', recommendedPlaceClicked);
+    let iframeLong = recommendedPlaceClicked.iframe;
+    let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    this.setState({
+      recommendPlaceIframe: `https:${iframeURL}`
+    });
   }
 
   handleDummyData() {
@@ -29,8 +43,6 @@ class App extends React.Component {
 
   handleSubmit (data) {
     console.log(`the client has submitted "${(JSON.stringify(data))}"`);
-
-    // make ajax calls
     $.ajax({
       url: '/addresses',
       method: 'POST',
@@ -46,24 +58,26 @@ class App extends React.Component {
     });
   }
 
-
   render () {
     console.log('First Render');
     return (
-      <MuiThemeProvider>
-        <Paper zDepth={1}>
-          <span>
+      <div className="render-app">
+        <MuiThemeProvider>
+          <div>
             <AppBar title="Midpoint" />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.state.iframe}
-                width="450px"
-                height="450px"
-                display="initial"
-                position="relative"
-                />
-          </span>
-        </Paper>
-      </MuiThemeProvider>
+            <Iframe url={this.state.recommendPlaceIframe}
+              width="450px"
+              height="450px"
+              display="initial"
+              position="relative"
+              />
+          </div>
+        </MuiThemeProvider>
+        <ResultsList handleSelectResult={this.handleSelectResult}
+                     recommendedPlaces={this.state.recommendedPlaces}
+        />
+      </div>
     );
   }
 }
