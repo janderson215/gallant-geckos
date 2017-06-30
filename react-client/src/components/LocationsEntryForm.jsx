@@ -4,7 +4,7 @@ import Geosuggest from 'react-geosuggest';
 import styles from '../app.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import Phone from 'react-phone-number-input';
+import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import rrui from 'react-phone-number-input/rrui.css';
 import rpni from 'react-phone-number-input/style.css';
 
@@ -79,6 +79,11 @@ class AddressSet extends React.Component {
     // format the states of addressess and numbers to be an array of individual objects containing each
     let people = [];
     for (var i = 0; i < this.state.addresses.length; i++) {
+      if (isValidPhoneNumber(this.state.phoneNumbers[i]) === false) {
+        alert(`Bad phone number for person #${i + 1}`);
+        this.handlePhoneNumberChange(i, '');
+        throw 'error';
+      }
       people.push({
         address: this.state.addresses[i],
         phone: this.state.phoneNumbers[i]
