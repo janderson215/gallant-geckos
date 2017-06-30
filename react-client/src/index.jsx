@@ -17,8 +17,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-
+      iframe: null
     };
+  }
+
+  componentDidMount() {
+    console.log('mounting component');
+    this.handleDummyData();
+    this.setState = {
+      iframe: this.handleDummyData()
+    };
+    console.log(this.state.iframe);
   }
 
   handleDummyData() {
@@ -31,7 +40,7 @@ class App extends React.Component {
 
   handleSubmit (data) {
     console.log(`the client has submitted "${JSON.stringify(data)}"`);
-    console.log('hello' + this.handleDummyData());
+
     // make ajax calls
     $.ajax({
       url: '/addresses',
@@ -57,7 +66,7 @@ class App extends React.Component {
           <span>
             <AppBar title="Midpoint" />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.handleDummyData()}
+              <Iframe url={this.state.iframeUrl}
                 width="450px"
                 height="450px"
                 display="initial"
