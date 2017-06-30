@@ -4,6 +4,9 @@ import Geosuggest from 'react-geosuggest';
 import styles from '../app.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Phone from 'react-phone-number-input';
+import rrui from 'react-phone-number-input/rrui.css';
+import rpni from 'react-phone-number-input/style.css';
 
 class AddressSet extends React.Component {
   constructor(props) {
@@ -43,7 +46,7 @@ class AddressSet extends React.Component {
 
   handlePhoneNumberChange(i, e) {
     let phoneNumbers = this.state.phoneNumbers.slice();
-    phoneNumbers[i] = e.target.value;
+    phoneNumbers[i] = e;
     this.setState({
       phoneNumbers
     });
@@ -112,12 +115,24 @@ class AddressSet extends React.Component {
 
   createPhoneNumberField(i) {
     return (
-      <input 
-        type="text" 
-        value={this.state.phoneNumbers[i] || ''}
+      // <input 
+      //   type="text" 
+      //   value={this.state.phoneNumbers[i] || ''}
+      //   placeholder={`Phone Number #${i + 1}`}
+      //   onChange={this.handlePhoneNumberChange.bind(this, i)}
+      // />
+      <Phone 
         placeholder={`Phone Number #${i + 1}`}
-        onChange={this.handlePhoneNumberChange.bind(this, i)}
-      />
+        onChange={ phone => {
+          let phoneNumbers = this.state.phoneNumbers.slice();
+          phoneNumbers[i] = phone;
+          this.setState({
+            phoneNumbers
+          });
+        }}
+        value={this.state.phoneNumbers[i] || ''}
+        country="US"
+        />
     );
   }
 
