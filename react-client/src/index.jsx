@@ -9,25 +9,14 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import styles from './app.css';
 import Paper from 'material-ui/Paper';
-
 // import BottomNavigation from 'material-ui/BottomNavigation';
-
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      iframe: null
-    };
-  }
-
-  componentDidMount() {
-    console.log('mounting component');
-    this.handleDummyData();
-    this.setState = {
       iframe: this.handleDummyData()
     };
-    console.log(this.state.iframe);
   }
 
   handleDummyData() {
@@ -39,7 +28,7 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
-    console.log(`the client has submitted "${JSON.stringify(data)}"`);
+    console.log(`the client has submitted "${(JSON.stringify(data))}"`);
 
     // make ajax calls
     $.ajax({
@@ -59,14 +48,14 @@ class App extends React.Component {
 
 
   render () {
-    console.log('RENDERINGGG');
+    console.log('First Render');
     return (
       <MuiThemeProvider>
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.state.iframeUrl}
+              <Iframe url={this.state.iframe}
                 width="450px"
                 height="450px"
                 display="initial"
