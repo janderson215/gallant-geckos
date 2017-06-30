@@ -1,4 +1,4 @@
-# Meet with Others / Find Central Command / name TBD
+# Midpoint
 
 > Input locations between people or interesting places and this app will find a mid-point between all of them. 
 
@@ -28,7 +28,9 @@
 - Node 6.4.x
 - Redis 2.6.x
 - Postgresql 9.1.x
-- etc
+- Webpack 3.0.x
+- Mongoose 4.10.8
+- Babel
 - etc
 
 ## Development
@@ -38,14 +40,12 @@
 From within the root directory:
 
 ```sh
-npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_DOC)
+View the project roadmap [here](https://docs.google.com/document/d/1gwMCwHzg1v912O8-o7DWfKKVxnjXrX1bHa852UkdFKU/edit#)
 
 
 ## Contributing
