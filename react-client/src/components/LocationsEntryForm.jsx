@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Geosuggest from 'react-geosuggest';
-import styles from '../app.css';
+import styles from '../geosuggest.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import rrui from 'react-phone-number-input/rrui.css';
 import rpni from 'react-phone-number-input/style.css';
+import Divider from 'material-ui/Divider';
 
 class AddressSet extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class AddressSet extends React.Component {
   }
 
   handleNameChange(e) {
+    console.log(e.target.value);
     this.setState({
       name: e.target.value
     });
@@ -155,6 +157,9 @@ class AddressSet extends React.Component {
           <div key={i}>
             {this.createGeosuggest(i)}
             {this.createPhoneNumberField(i)}
+            <br></br>
+            <Divider />
+            <br></br>
           </div>
         );
       } else {
@@ -163,6 +168,8 @@ class AddressSet extends React.Component {
             {this.createGeosuggest(i)}
             {this.createPhoneNumberField(i)}
             {this.createRemoveFieldButton(i)}
+            <br></br>
+            <br></br>            
           </div>
         );
       }
@@ -173,7 +180,9 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
+        <br></br>
+        <TextField hintText="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
+        {/*<input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>*/}
         {this.createForm()}
         <br></br>
         <br></br>

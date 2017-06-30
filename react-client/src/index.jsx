@@ -7,7 +7,7 @@ import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
-import styles from './app.css';
+import styles from './geosuggest.css';
 import Paper from 'material-ui/Paper';
 // import BottomNavigation from 'material-ui/BottomNavigation';
 
@@ -38,9 +38,9 @@ class App extends React.Component {
       error: function(err) {
         console.log(err);
       },
-      success: function(data) {
+      success: function(data, callback) {
         if (data) {
-          console.log(data);
+          
         }
       }
     });
