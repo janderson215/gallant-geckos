@@ -56,8 +56,6 @@ app.post('/addresses', (req, res) => {
   })
   .then(() => {
     let nearbySearch = nearbyRequestPrefix.concat(nearbyRequestSuffix);
-    console.log('phones', phoneNums);
-    console.log('nearbySearch string', nearbySearch)
     rp(nearbySearch)
     .then(responseObject => {
       responseObject = JSON.parse(responseObject);
@@ -91,24 +89,15 @@ app.post('/addresses', (req, res) => {
       } else {
         console.log('Error that is not ZERO_RESULTS on Attempt 1');
       }
-
-      console.log('just before POI for', pointsOfInterest);
       pointsOfInterest.forEach(pointOfInterest => {
         let address = pointOfInterest.vicinity.split(' ').join('%20'); //url encoding
         pointOfInterest.iframe = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`
       });
     })
-    .then(() => {
-      res.status(201).send()//(pointsOfInterest);
-    });
   })
   .then(() => {
-    // rp('http://localhost:3000/pointsOfInterest')
-    // .then(() => {
       //save to db here
-      //res.write('points of interest');
-    // })
-    // .catch(err => console.log(err));
+      res.status(201).send('session object id here');
   })
   .catch(err => console.log(err));
 });
