@@ -81,6 +81,13 @@ class AddressSet extends React.Component {
     );
   }
 
+  createPhoneNumberField(i) {
+    return (
+      <input>
+      </input>
+    );
+  }
+
   createRemoveFieldButton(i) {
     return (
       <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
