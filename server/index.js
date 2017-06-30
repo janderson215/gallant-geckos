@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
-const googleAPIkey = process.env.googleAPIkey;
+let googleAPIkey = require('../keys.js').googleAPIkey || process.env.googleAPIkey;
 
 const app = express();
 
@@ -18,26 +18,28 @@ let geocodedAddresses = [];
 let phoneNums = [];
 let currentMidpoint;
 let pointsOfInterest;
+let type;
 let address;
 let coords;
+let radius;
 let latSum = 0;
 let lngSum = 0;
 let nearbyRequestSuffix;
 
 app.post('/addresses', (req, res) => {
-  let type = req.body.type;
+  type = req.body.type;
   let people = req.body.people;
   
   let geocodeAddresses = new Promise((resolve, reject) => {
     people.forEach(person => {
-      phoneNums.push(person.phoneNums);
+      phoneNums.push(person.phone);
       address = person.address.split(' ').join('+');
       let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
       rp(geocodingUrl)
       .then(geocodedObject => {
         geocodedAddresses.push([(JSON.parse(geocodedObject).results[0].geometry.location.lat),
           (JSON.parse(geocodedObject).results[0].geometry.location.lng)]);
-          if (geocodedAddresses.length === addresses.length) {
+          if (geocodedAddresses.length === people.length) {
             resolve();
           }
       });
@@ -49,29 +51,66 @@ app.post('/addresses', (req, res) => {
       latSum += Number(geocodedAddress[0]);
       lngSum += Number(geocodedAddress[1]);
     });
-    currentMidpoint = [(latSum/addresses.length).toFixed(7),(lngSum/addresses.length.toFixed(7))];
-    nearbyRequestSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`
+    currentMidpoint = [(latSum/geocodedAddresses.length).toFixed(7),(lngSum/geocodedAddresses.length).toFixed(7)];
+    nearbyRequestSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`;
   })
   .then(() => {
     let nearbySearch = nearbyRequestPrefix.concat(nearbyRequestSuffix);
+    console.log('phones', phoneNums);
+    console.log('nearbySearch string', nearbySearch)
     rp(nearbySearch)
     .then(responseObject => {
-      pointsOfInterest = JSON.parse(responseObject).results;
+      responseObject = JSON.parse(responseObject);
+      if(responseObject.status === 'OK') {
+        pointsOfInterest = responseObject.results;
+      } else if(responseObject.status === 'ZERO_RESULTS') {
+        radius = 10000;
+        nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+        console.log('attempt 2 query string', nearbySearch);
+        rp(nearbySearch)
+        .then(responseObject2 => {
+          responseObject2 = JSON.parse(responseObject2);
+          if(responseObject2.status === 'OK') {
+            pointsOfInterest = responseObject.results;
+          } else if(responseObject2.status === 'ZERO_RESULTS') {
+            radius = 50000;
+            nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+            rp(nearbySearch)
+            .then(responseObject3 => {
+              responseObject3 = JSON.parse(responseObject3);
+              if(responseObject3.status === 'OK') {
+                pointsOfInterest = responseObject.results;
+              } else {
+                console.log('Error on Attempt 3')
+              }
+            })
+          } else {
+            console.log('Error on Attempt 2')
+          }
+        })
+      } else {
+        console.log('Error that is not ZERO_RESULTS on Attempt 1');
+      }
+
+      console.log('just before POI for', pointsOfInterest);
       pointsOfInterest.forEach(pointOfInterest => {
         let address = pointOfInterest.vicinity.split(' ').join('%20'); //url encoding
         pointOfInterest.iframe = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`
       });
     })
     .then(() => {
-      // rp('http://localhost:3000/pointsOfInterest')
-      // .then(() => {
-        //save to db here
-        res.status(201).send(pointsOfInterest);
-      // })
-      // .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
-  });
+      res.status(201).send()//(pointsOfInterest);
+    });
+  })
+  .then(() => {
+    // rp('http://localhost:3000/pointsOfInterest')
+    // .then(() => {
+      //save to db here
+      //res.write('points of interest');
+    // })
+    // .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err));
 });
 
 //Pulling from the DB
