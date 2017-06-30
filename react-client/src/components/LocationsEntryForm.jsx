@@ -63,16 +63,20 @@ class AddressSet extends React.Component {
     });
   }
 
-
-
   handleSubmit(event) {
     // alert(`Hello, you submitted ${this.state.value}`);
-    // need this line to below to pass the value from the input to the index file so that it can be used there
     event.preventDefault(); 
+    // format the states of addressess and numbers to be an array of individual objects containing each
+    let people = [];
+    for (var i = 0; i < this.state.addresses.length; i++) {
+      people.push({
+        address: this.state.addresses[i],
+        phone: this.state.phoneNumbers[i]
+      });
+    }
     var data = {
       activity: this.state.activity,
-      
-
+      people: people
     };
     this.props.onSubmit(data);
   }
