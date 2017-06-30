@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Geosuggest from 'react-geosuggest';
-import styles from '../geosuggest.css';
+import styles from '../app.css';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 class AddressSet extends React.Component {
   constructor(props) {
@@ -91,18 +92,16 @@ class AddressSet extends React.Component {
     for (var i = 0; i < this.state.count; i++) {
       if (i < 2) {
         formItems.push(
-          <div key={i}>
+          <li key={i}>
             {this.createGeosuggest(i)}
-            {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
-
-          </div>
+          </li>
         );
       } else {
         formItems.push(
-          <div key={i}>
+          <li key={i}>
             {this.createGeosuggest(i)}
             {this.createRemoveFieldButton(i)}
-          </div>
+          </li>
         );
       }
     }
@@ -115,12 +114,11 @@ class AddressSet extends React.Component {
         {this.createForm()}
         <br></br>
         <br></br>
+        <br></br>
         <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
-        <br></br>
-        <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
+        <input type="text" className="activityinput" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
         <RaisedButton type="submit" label="Submit" />
-
       </form>
     );
   }
