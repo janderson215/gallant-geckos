@@ -21,17 +21,17 @@
 
 ## Usage
 
-> Some usage instructions
+> Currently a primary user must input all points of interest. Ideally, a person will have the option to send out requests to several people (via Twilio, email, or similar) and have them reply asynchronously, until enough time has passed.
 
 ## Requirements
 
 - Node 6.4.x
-- Redis 2.6.x
-- Postgresql 9.1.x
 - Webpack 3.0.x
 - Mongoose 4.10.8
-- Babel
-- etc
+- Babel packages 6.x.x
+- React 15.6.x
+- Express 4.15.3
+- JQuery 3.2.1
 
 ## Development
 
@@ -50,4 +50,4 @@ View the project roadmap [here](https://docs.google.com/document/d/1gwMCwHzg1v91
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+See [CONTRIBUTING.md](https://github.com/gallant-geckos/gallant-geckos/blob/master/CONTRIBUTING.md) for contribution guidelines.
