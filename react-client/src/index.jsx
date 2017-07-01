@@ -75,18 +75,18 @@ class App extends React.Component {
     console.log('First Render');
     return (
       <div className="render-app">
-        <MuiThemeProvider>
-          <div>
-            <AppBar title="Midpoint" />
-              <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-            <Iframe url={this.state.recommendPlaceIframe}
-              width="450px"
-              height="450px"
-              display="initial"
-              position="relative"
-              />
-          </div>
-        </MuiThemeProvider>
+        <MuiThemeProvider> 
+          <Paper zDepth={1}>
+              <AppBar title="Midpoint" showMenuIconButton={false} />
+                <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
+              <Iframe url={this.state.recommendPlaceIframe}
+                width="450px"
+                height="450px"
+                display="initial"
+                position="relative"
+                />
+            </Paper>
+          </MuiThemeProvider>
         <ResultsList handleSelectResult={this.handleSelectResult}
                      recommendedPlaces={this.state.recommendedPlaces}
         />
