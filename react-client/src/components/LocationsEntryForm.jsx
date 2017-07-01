@@ -182,7 +182,6 @@ class AddressSet extends React.Component {
       <form onSubmit={this.handleSubmit}> 
         <br></br>
         <TextField hintText="What's your name?" onChange={this.handleNameChange.bind(this)}/>
-
         {this.createForm()}
         <br></br>
         <br></br>
