@@ -53,7 +53,7 @@ class App extends React.Component {
       <MuiThemeProvider>
         <Paper zDepth={1}>
           <span>
-            <AppBar title="Midpoint" />
+            <AppBar title="Midpoint" showMenuIconButton={false} />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
               <Iframe url={this.state.iframe}
                 width="450px"
