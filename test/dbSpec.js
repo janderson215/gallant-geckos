@@ -8,8 +8,8 @@ const Recommendation = require('./index').recommendation;
 mongoose.connect('mongodb://localhost/sessions');
 var db = mongoose.connection;
 // console.log('db: ', db);
-// db.dropDatabase();
 
+//db.dropDatabase();
 
 var testDate = new Date('2015/03/25');
 var recommendResult = new Recommendation({
@@ -43,7 +43,6 @@ recommendResult.save(function(err) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessionTest saved');
 });
-
 Session.find({}, function(err, sessions) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessions: ', sessions);

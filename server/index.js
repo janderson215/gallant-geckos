@@ -3,8 +3,6 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
 const googleAPIkey = process.env.googleAPIkey;
-
-
 const dbHelpers = require('../db/db-helpers');
 
 const app = express();
