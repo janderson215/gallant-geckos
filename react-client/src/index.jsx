@@ -74,10 +74,10 @@ class App extends React.Component {
   render () {
     console.log('First Render');
     return (
-      <div className="render-app">
-        <MuiThemeProvider>
-          <div>
-            <AppBar title="Midpoint" />
+      <MuiThemeProvider>
+        <Paper zDepth={1}>
+          <span>
+            <AppBar title="Midpoint" showMenuIconButton={false} />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
             <Iframe url={this.state.recommendPlaceIframe}
               width="450px"
@@ -85,12 +85,12 @@ class App extends React.Component {
               display="initial"
               position="relative"
               />
-          </div>
-        </MuiThemeProvider>
+            </span>
+            </Paper>
         <ResultsList handleSelectResult={this.handleSelectResult}
                      recommendedPlaces={this.state.recommendedPlaces}
         />
-      </div>
+        </MuiThemeProvider>
     );
   }
 }
