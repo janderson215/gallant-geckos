@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../geosuggest.css';
+import styles from '../app.css';
 
 const ResultsListEntry = (props) => (
   <div className="recommended-place">

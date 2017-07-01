@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../geosuggest.css';
+import styles from '../app.css';
 import ResultsListEntry from './ResultsListEntry.jsx';
 
 const ResultsList = (props) => (
