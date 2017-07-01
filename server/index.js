@@ -4,6 +4,9 @@ const request = require('request');
 const rp = require('request-promise-native');
 const googleAPIkey = process.env.googleAPIkey;
 
+
+const dbHelpers = require('../db/db-helpers');
+
 const app = express();
 
 app.use( bodyParser.json() );
@@ -15,27 +18,31 @@ const iframePrefix = '<iframe src="https://www.google.com/maps/embed/v1/place?q=
 
 let addresses = [];
 let geocodedAddresses = [];
+let phoneNums = [];
 let currentMidpoint;
 let pointsOfInterest;
+let type;
 let address;
 let coords;
+let radius;
 let latSum = 0;
 let lngSum = 0;
 let nearbyRequestSuffix;
 
 app.post('/addresses', (req, res) => {
-  let type = req.body.activity;
-  let addresses = req.body.locations;
+  type = req.body.type;
+  let people = req.body.people;
   
   let geocodeAddresses = new Promise((resolve, reject) => {
-    addresses.forEach(address => {
-      address = address.split(' ').join('+');
+    people.forEach(person => {
+      phoneNums.push(person.phone);
+      address = person.address.split(' ').join('+');
       let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
       rp(geocodingUrl)
       .then(geocodedObject => {
         geocodedAddresses.push([(JSON.parse(geocodedObject).results[0].geometry.location.lat),
           (JSON.parse(geocodedObject).results[0].geometry.location.lng)]);
-          if (geocodedAddresses.length === addresses.length) {
+          if (geocodedAddresses.length === people.length) {
             resolve();
           }
       });
@@ -47,34 +54,63 @@ app.post('/addresses', (req, res) => {
       latSum += Number(geocodedAddress[0]);
       lngSum += Number(geocodedAddress[1]);
     });
-    currentMidpoint = [(latSum/addresses.length).toFixed(7),(lngSum/addresses.length.toFixed(7))];
-    nearbyRequestSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`
+    currentMidpoint = [(latSum/geocodedAddresses.length).toFixed(7),(lngSum/geocodedAddresses.length).toFixed(7)];
+    nearbyRequestSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`;
   })
   .then(() => {
     let nearbySearch = nearbyRequestPrefix.concat(nearbyRequestSuffix);
     rp(nearbySearch)
     .then(responseObject => {
-      pointsOfInterest = JSON.parse(responseObject).results;
+      responseObject = JSON.parse(responseObject);
+      if(responseObject.status === 'OK') {
+        pointsOfInterest = responseObject.results;
+      } else if(responseObject.status === 'ZERO_RESULTS') {
+        radius = 10000;
+        nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+        console.log('attempt 2 query string', nearbySearch);
+        rp(nearbySearch)
+        .then(responseObject2 => {
+          responseObject2 = JSON.parse(responseObject2);
+          if(responseObject2.status === 'OK') {
+            pointsOfInterest = responseObject.results;
+          } else if(responseObject2.status === 'ZERO_RESULTS') {
+            radius = 50000;
+            nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+            rp(nearbySearch)
+            .then(responseObject3 => {
+              responseObject3 = JSON.parse(responseObject3);
+              if(responseObject3.status === 'OK') {
+                pointsOfInterest = responseObject.results;
+              } else {
+                console.log('Error on Attempt 3')
+              }
+            })
+          } else {
+            console.log('Error on Attempt 2')
+          }
+        })
+      } else {
+        console.log('Error that is not ZERO_RESULTS on Attempt 1');
+      }
       pointsOfInterest.forEach(pointOfInterest => {
         let address = pointOfInterest.vicinity.split(' ').join('%20'); //url encoding
         pointOfInterest.iframe = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`
       });
     })
-    .then(() => {
-      rp('http://localhost:3000/pointsOfInterest')
-      .then(() => {
-        res.status(201).send();
-      })
-      .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
-  });
+  })
+  .then(() => {
+      //save to db here
+      res.status(201).send('session object id here');
+  })
+  .catch(err => console.log(err));
 });
 
-app.get('/pointsOfInterest', (req, res) => {
-  console.log(pointsOfInterest);
-  res.status(200).send(pointsOfInterest);
-});
+//Pulling from the DB
+// app.get('/pointsOfInterest', (req, res) => {
+//   console.log(pointsOfInterest);
+//   //find from db
+//   res.status(200).send(pointsOfInterest);
+// });
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port " + this.address().port);

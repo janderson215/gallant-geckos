@@ -7,14 +7,15 @@ import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
+import styles from './app.css';
+import Paper from 'material-ui/Paper';
 // import BottomNavigation from 'material-ui/BottomNavigation';
-
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-
+      iframe: this.handleDummyData()
     };
   }
 
@@ -27,8 +28,8 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
-    console.log(`the client has submitted "${JSON.stringify(data)}"`);
-    console.log('hello' + this.handleDummyData());
+    console.log(`the client has submitted "${(JSON.stringify(data))}"`);
+
     // make ajax calls
     $.ajax({
       url: '/addresses',
@@ -47,19 +48,21 @@ class App extends React.Component {
 
 
   render () {
-    console.log('RENDERINGGG');
+    console.log('First Render');
     return (
       <MuiThemeProvider>
-        <div>
-          <AppBar title="Midpoint" />
-            <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-          <Iframe url={this.handleDummyData()}
-            width="450px"
-            height="450px"
-            display="initial"
-            position="relative"
-            />
-        </div>
+        <Paper zDepth={1}>
+          <span>
+            <AppBar title="Midpoint" />
+              <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
+              <Iframe url={this.state.iframe}
+                width="450px"
+                height="450px"
+                display="initial"
+                position="relative"
+                />
+          </span>
+        </Paper>
       </MuiThemeProvider>
     );
   }
