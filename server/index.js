@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
-const googleAPIkey = process.env.googleAPIkey;
-const dbHelpers = require('../db/db-helpers');
+const googleAPIkey = require('../keys') || require('src/key.js').googleAPIkey || process.env.googleAPIkey;
+const db = require('../db/db-helpers');
 
 const app = express();
 
@@ -18,7 +18,8 @@ let addresses = [];
 let geocodedAddresses = [];
 let phoneNums = [];
 let currentMidpoint;
-let pointsOfInterest;
+let pointsOfInterest = [];
+let session;
 let type;
 let address;
 let coords;
@@ -30,8 +31,11 @@ let nearbyRequestSuffix;
 app.post('/addresses', (req, res) => {
   type = req.body.type;
   let people = req.body.people;
+  let initiatorName = req.body.initiatorName;
+  let sessionType = 'meet with others';
   
   let geocodeAddresses = new Promise((resolve, reject) => {
+    console.log(googleAPIkey)
     people.forEach(person => {
       phoneNums.push(person.phone);
       address = person.address.split(' ').join('+');
@@ -43,9 +47,19 @@ app.post('/addresses', (req, res) => {
           if (geocodedAddresses.length === people.length) {
             resolve();
           }
-      });
+      })
+      .catch(err => console.log('Error geocoding addresses: ',geocodingUrl, err));
     });
   });
+
+  let mutatePlacesOfInterest = new Promise((resolve, reject) => {
+    pointsOfInterest.forEach(pointOfInterest => {
+      let address = pointOfInterest.vicinity.split(' ').join('%20'); //url encoding
+      pointOfInterest.iframe = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`
+    });
+    console.log('POIs', pointsOfInterest)
+    resolve(pointsOfInterest);
+  })
 
   geocodeAddresses.then(() => {
     geocodedAddresses.forEach(geocodedAddress => {
@@ -61,7 +75,8 @@ app.post('/addresses', (req, res) => {
     .then(responseObject => {
       responseObject = JSON.parse(responseObject);
       if(responseObject.status === 'OK') {
-        pointsOfInterest = responseObject.results;
+        mutatePlacesOfInterest.resolve(responseObject.results);
+        console.log('pointsOfInterest set on 1st attempt');
       } else if(responseObject.status === 'ZERO_RESULTS') {
         radius = 10000;
         nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
@@ -70,37 +85,71 @@ app.post('/addresses', (req, res) => {
         .then(responseObject2 => {
           responseObject2 = JSON.parse(responseObject2);
           if(responseObject2.status === 'OK') {
-            pointsOfInterest = responseObject.results;
-          } else if(responseObject2.status === 'ZERO_RESULTS') {
+            resolve(responseObject2.results);
+            console.log('pointsOfInterest set on 2nd attempt');
+          } else if (responseObject2.status === 'ZERO_RESULTS') {
             radius = 50000;
             nearbyRequestSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
             rp(nearbySearch)
             .then(responseObject3 => {
               responseObject3 = JSON.parse(responseObject3);
               if(responseObject3.status === 'OK') {
-                pointsOfInterest = responseObject.results;
+                resolve(responseObject3.results);
+                console.log('pointsOfInterest set on 3rd attempt');
               } else {
                 console.log('Error on Attempt 3')
               }
             })
+            .catch(err => console.log('Caught error on Attempt 3:', err))
           } else {
             console.log('Error on Attempt 2')
           }
         })
+        .catch(err => console.log('Caught error on Attempt 2: ', err))
       } else {
         console.log('Error that is not ZERO_RESULTS on Attempt 1');
       }
-      pointsOfInterest.forEach(pointOfInterest => {
-        let address = pointOfInterest.vicinity.split(' ').join('%20'); //url encoding
-        pointOfInterest.iframe = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`
-      });
     })
+    .catch(err => console.log('Nearby Search API error: ', err));
   })
   .then(() => {
-      //save to db here
-      res.status(201).send('session object id here');
+    //save to db here
+    // const recommendedObject = (pointOfInterest => {
+    //   return {
+    //     name: pointOfInterest.name,
+    //     address: pointOfInterest.vicinity,
+    //     iframe_string: pointOfInterest.iframe,
+    //     photo_url: pointOfInterest.photos
+    //   };
+    // };
+    const sessionObject = {
+      session_type: sessionType,
+      initiator_name: initiatorName,
+      location_type: type,
+      phone_numbers: phoneNums,
+      midpoint_coordinates: currentMidpoint.join(''),
+      recommended_destinations: pointsOfInterest
+    };
+    console.log('Rec Ds after setting equal to POIs', sessionObject.recommended_destinations)
+
+    const writeSession = new Promise((resolve, reject) => {
+      console.log('Saving Session');
+
+    });
+
+    db.saveSessionModel(sessionObject, result => {
+      console.log('Session saved');
+      resolve(result)
+      // .then(() => res.status(201).send())//session._id))
+    });
+
+    writeSession;
+    // .then((session) => {
+    //   res.status(201).send(session._id);
+    // })
+    // .catch(err => res.status(500).send())
   })
-  .catch(err => console.log(err));
+  .then(() => res.status(201).send())//session._id))
 });
 
 //Pulling from the DB

@@ -1,10 +1,10 @@
 module.exports = {
   "pointsOfInterest" : {
-      "photo" : "url",
-      "name" : "Batman",
-      "vicinity" : "address",
-      "iframe" : "url"
-    },
+    "photo" : "url",
+    "name" : "Batman",
+    "vicinity" : "address",
+    "iframe" : "url"
+  },
   "phoneNums" : ["+19545524394", "+15302202557", "+17275806025", "+14156239347"],
   "geometry" : {
     "location" : {
