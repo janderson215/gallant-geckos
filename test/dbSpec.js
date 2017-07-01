@@ -8,8 +8,8 @@ const Recommendation = require('./index').recommendation;
 mongoose.connect('mongodb://localhost/sessions');
 var db = mongoose.connection;
 // console.log('db: ', db);
-//db.dropDatabase();
 
+//db.dropDatabase();
 
 var testDate = new Date('2015/03/25');
 var recommendResult = new Recommendation({
@@ -25,7 +25,6 @@ var sessionTest = new Session({
   initiator_name: 'Pauly Diesel',
   event_name: 'SmashBros with Bros',
   location_type: 'barcade', //for api search term
-  radius: 10,
   locations: ['123 Fake St, PaulsVille, FL 11111', '456 Real Ave, JonsHamlet, FL 22222'],  
   center_coordinates: '40.714224,-73.961452',
   recommended_destination: recommendResult,
@@ -40,6 +39,10 @@ sessionTest.save(function(err) {
   console.log('sessionTest saved');
 });
 
+recommendResult.save(function(err) {
+  if (err) { return console.error('Error: ', err); }
+  console.log('sessionTest saved');
+});
 Session.find({}, function(err, sessions) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessions: ', sessions);

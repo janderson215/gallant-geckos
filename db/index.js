@@ -5,11 +5,7 @@ mongoose.Promise = global.Promise;
 var locationSchema = new mongoose.Schema({
   latitude: Number,
   longitude: Number,
-  street_address: String,
-  city: String,
-  state: String,
-  zipcode: String,
-  country: String
+  street_address: String
 });
 
 var recommendSchema = new mongoose.Schema({
@@ -17,7 +13,6 @@ var recommendSchema = new mongoose.Schema({
   address: String,
   iframe_string: String,
   photo_url: String
-  //ETC
 });
 
 var sessionSchema = new mongoose.Schema({
@@ -28,15 +23,12 @@ var sessionSchema = new mongoose.Schema({
                          'find central command']
                 },
   initiator_name: String,
-  event_name: String,
   location_type: String, //for api search term
-  radius: Number,
-  locations: [String],
+  phone_numbers: [String],
   // locations: [locationSchema],
-  center_coordinates: String, //depends on api format.
+  midpoint_coordinates: String, //depends on api format.
                           //Server makes call to google geocode first
-  recommended_destination: recommendSchema,
-  init_time: Date
+  recommended_destinations: recommendSchema
 });
 
 var attendeeSchema = new mongoose.Schema({
@@ -44,7 +36,7 @@ var attendeeSchema = new mongoose.Schema({
   location: [String],
   // location: locationSchema,
   name: String,
-  phone_number: String,
+  phone_number: String
 });
 
 
