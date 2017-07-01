@@ -37,7 +37,7 @@ var session = new Session({
   initiator_name: 'Wilson ', // ??? 
   location_type: 'coffee',
   phone_numbers: phoneNums,
-  recommended_destinations: [saveRecommendResult]
+  //recommended_destinations: [saveRecommendResult] //Paul removed invocation, but this needs to be passed an array of objects structured like the schema
 });
 
 let saveSessionModel = session.save(function(err) {
