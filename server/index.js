@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
-let googleAPIkey = require('../keys.js').googleAPIkey || process.env.googleAPIkey;
+const googleAPIkey = process.env.googleAPIkey;
+
 
 const app = express();
 
