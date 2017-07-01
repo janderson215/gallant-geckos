@@ -15,4 +15,3 @@ const ResultsList = (props) => (
 );
 
 export default ResultsList;
-    // {props.recommendedPlaces[0].test}
