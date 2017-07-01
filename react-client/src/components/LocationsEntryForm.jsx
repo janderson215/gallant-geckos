@@ -1,24 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Geosuggest from 'react-geosuggest';
-import styles from '../geosuggest.css';
+import styles from '../app.css';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
+import rrui from 'react-phone-number-input/rrui.css';
+import rpni from 'react-phone-number-input/style.css';
 
 class AddressSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locations: [],
-      count: 2,
+      addresses: [],
+      phoneNumbers: [],
+      count: 2, // starting number of fields
       activity: '',
+      name: ''
     };
     this.handleAddressChange = this.handleAddressChange.bind(this);
+    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleActivityChange(event) {
+  handleActivityChange(e) {
     this.setState({
-      activity: event.target.value
+      activity: e.target.value
+    });
+  }
+
+  handleNameChange(e) {
+    this.setState({
+      name: e.target.value
+    });
+  }
+
+  handleAddressChange(i, value) {
+    console.log(`i ${i} e ${value}`);
+    let addresses = this.state.addresses.slice();
+    addresses[i] = value;
+    this.setState({
+      addresses
+    });
+  }
+
+  handlePhoneNumberChange(i, e) {
+    let phoneNumbers = this.state.phoneNumbers.slice();
+    phoneNumbers[i] = e;
+    this.setState({
+      phoneNumbers
     });
   }
 
@@ -29,62 +59,113 @@ class AddressSet extends React.Component {
     });
   }
 
-  handleRemoveAddress(index) {
-    let locations = this.state.locations.slice();
-    console.log(`idx: ${index} value: ${locations[index]}`);
-    locations.splice(index, 1);
+  handleRemoveEntry(index) {
+    let addresses = this.state.addresses.slice();
+    let phoneNumbers = this.state.phoneNumbers.slice();
+    phoneNumbers.splice(index, 1);
+    // console.log(`idx: ${index} value: ${addresses[index]}`);
+    addresses.splice(index, 1);
     this.setState({
       count: this.state.count - 1,
-      locations
-    });
-  }
+      addresses,
+      phoneNumbers
 
-  handleAddressChange(i, value) {
-    console.log(`i ${i} e ${value}`);
-    let locations = this.state.locations.slice();
-    locations[i] = value;
-    this.setState({
-      locations
     });
   }
 
   handleSubmit(event) {
     // alert(`Hello, you submitted ${this.state.value}`);
-    // need this line to below to pass the value from the input to the index file so that it can be used there
     event.preventDefault(); 
+    // format the states of addressess and numbers to be an array of individual objects containing each
+    let people = [];
+    for (var i = 0; i < this.state.addresses.length; i++) {
+      if (isValidPhoneNumber(this.state.phoneNumbers[i]) === false) {
+        alert(`Bad phone number for person #${i + 1}`);
+        this.handlePhoneNumberChange(i, '');
+        throw 'error';
+      }
+      people.push({
+        address: this.state.addresses[i],
+        phone: this.state.phoneNumbers[i]
+      });
+    }
     var data = {
-      locations: this.state.locations,
-      activity: this.state.activity
+      type: this.state.activity,
+      people: people,
+      initiator: this.state.name
     };
     this.props.onSubmit(data);
   }
 
   onSuggestSelect(i, suggest) {
     // console.log(`${i} ${suggest.label}`);
-    let locations = this.state.locations.slice();
-    locations[i] = suggest.label;
+    let addresses = this.state.addresses.slice();
+    addresses[i] = suggest.label;
     this.setState({
-      locations
+      addresses
     });
+  }
+
+  createGeosuggest(i) {
+    return (
+      <Geosuggest
+        placeholder={`Address #${i + 1}`}
+        ref={el => this._geoSuggest = el}
+        onChange={this.handleAddressChange.bind(this, i)}
+        onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+        initialValue={this.state.addresses[i] || ''}
+      />
+    );
+  }
+
+  createPhoneNumberField(i) {
+    return (
+      // <input 
+      //   type="text" 
+      //   value={this.state.phoneNumbers[i] || ''}
+      //   placeholder={`Phone Number #${i + 1}`}
+      //   onChange={this.handlePhoneNumberChange.bind(this, i)}
+      // />
+      <Phone 
+        placeholder={`Phone Number #${i + 1}`}
+        onChange={ phone => {
+          let phoneNumbers = this.state.phoneNumbers.slice();
+          phoneNumbers[i] = phone;
+          this.setState({
+            phoneNumbers
+          });
+        }}
+        value={this.state.phoneNumbers[i] || ''}
+        country="US"
+        />
+    );
+  }
+
+  createRemoveFieldButton(i) {
+    return (
+      <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveEntry.bind(this, i)}/>
+    );
   }
 
   createForm() {
     let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
-      formItems.push(
-        <div key={i}>
-          <Geosuggest
-            placeholder={`Address #${i + 1}`}
-            ref={el => this._geoSuggest = el}
-            onChange={this.handleAddressChange.bind(this, i)}
-            onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-            initialValue={this.state.locations[i] || ''}
-          />
-          <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveAddress.bind(this, i)}/>
-          {/*<input type="text" value={this.state.locations[i] || ''} placeholder={`Address #${i + 1}`} onChange={this.handleAddressChange.bind(this, i)} />*/}
-
-        </div>
-      );
+      if (i < 2) {
+        formItems.push(
+          <div key={i}>
+            {this.createGeosuggest(i)}
+            {this.createPhoneNumberField(i)}
+          </div>
+        );
+      } else {
+        formItems.push(
+          <div key={i}>
+            {this.createGeosuggest(i)}
+            {this.createPhoneNumberField(i)}
+            {this.createRemoveFieldButton(i)}
+          </div>
+        );
+      }
     }
     return formItems;
   }
@@ -92,15 +173,15 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
+        <input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
+        <br></br>
         <br></br>
         <br></br>
         <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
-        <br></br>
         <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
         <RaisedButton type="submit" label="Submit" />
-
       </form>
     );
   }
