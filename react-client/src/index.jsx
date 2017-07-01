@@ -18,19 +18,26 @@ class App extends React.Component {
     this.state = { 
       iframe: this.handleDummyData(),
       recommendedPlaces: dummy,
-      recommendedPlaceIframe: ''
+      recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
     };
     this.handleSelectResult = this.handleSelectResult.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({
+      recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
+    });
+  }
+
   handleSelectResult(recommendedPlaceClicked) {
-    console.log('handleSelectResult invoked, wire state');
-    console.log('clicked on: ', recommendedPlaceClicked);
+    console.log('clicked on: ', recommendedPlaceClicked.name);
     let iframeLong = recommendedPlaceClicked.iframe;
     let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    console.log('passing into iframe: ', iframeURL);
     this.setState({
       recommendPlaceIframe: `https:${iframeURL}`
     });
+    console.log(this.state.recommendPlaceIframe);
   }
 
   handleDummyData() {
@@ -42,7 +49,8 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
-    console.log(`the client has submitted "${(JSON.stringify(data))}"`);
+    console.log(`client submits: "${JSON.stringify(data)}"`);
+    let that = this;
     $.ajax({
       url: '/addresses',
       method: 'POST',
@@ -52,7 +60,11 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          console.log(data);
+          console.log('data response from post: ', data);
+          this.setState({
+            recommendedPlaces: data,
+            recommendedPlaceIframe: handleSelectResult(data[0])
+          });
         }
       }
     });
