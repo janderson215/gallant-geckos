@@ -147,7 +147,6 @@ class EntrySet extends React.Component {
 
   createRemoveFieldButton(i) {
     return (
-
       <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveEntry.bind(this, i)}/>
     );
   }
@@ -183,8 +182,8 @@ class EntrySet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <AddEntryButton onClick={this.handleAddAddress.bind(this)}/>
-        <RaisedButton label="Add More People" onClick={this.handleAddAddress} />
+        <AddEntryButton addEntry={this.handleAddAddress} />
+        {/*<RaisedButton label="Add More People" onClick={this.handleAddAddress} />*/}
         <br></br>
         <TextField hintText="What's your name?" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
