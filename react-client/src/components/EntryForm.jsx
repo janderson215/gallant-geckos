@@ -129,6 +129,7 @@ class EntrySet extends React.Component {
       //   onChange={this.handlePhoneNumberChange.bind(this, i)}
       // />
       <Phone 
+        className="phone"
         placeholder={`Phone Number #${i + 1}`}
         onChange={ phone => {
           let phoneNumbers = this.state.phoneNumbers.slice();
@@ -150,6 +151,7 @@ class EntrySet extends React.Component {
   }
 
   createForm() {
+    // have it to make entries instead
     let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
       if (i < 2) {
