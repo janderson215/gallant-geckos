@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import LocationsEntrySet from './components/LocationsEntryForm.jsx';
+import EntrySet from './components/EntryForm.jsx';
 import Iframe from 'react-iframe';
 import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -83,19 +83,16 @@ class App extends React.Component {
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-            <Iframe url={this.state.recommendPlaceIframe}
-              width="450px"
-              height="450px"
-              display="initial"
-              position="relative"
-              />
-            </span>
-            </Paper>
-        <ResultsList handleSelectResult={this.handleSelectResult}
-                     recommendedPlaces={this.state.recommendedPlaces}
-        />
-        </MuiThemeProvider>
+              <EntrySet onSubmit={this.handleSubmit.bind(this)}/>
+              <Iframe url={this.state.iframe}
+                width="450px"
+                height="450px"
+                display="initial"
+                position="relative"
+                />
+          </span>
+        </Paper>
+      </MuiThemeProvider>
     );
   }
 }
