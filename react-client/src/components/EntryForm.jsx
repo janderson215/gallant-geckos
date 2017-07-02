@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Geosuggest from 'react-geosuggest';
 import styles from '../geosuggest.css';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -8,8 +7,9 @@ import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import rrui from 'react-phone-number-input/rrui.css';
 import rpni from 'react-phone-number-input/style.css';
 import Divider from 'material-ui/Divider';
+import AddEntryButton from './AddEntryButton.jsx';
 
-class AddressSet extends React.Component {
+class EntrySet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +22,9 @@ class AddressSet extends React.Component {
     this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddAddress = this.handleAddAddress.bind(this);
+    this.handleActivityChange = this.handleActivityChange.bind(this);
+
   }
 
   handleActivityChange(e) {
@@ -71,7 +74,6 @@ class AddressSet extends React.Component {
       count: this.state.count - 1,
       addresses,
       phoneNumbers
-
     });
   }
 
@@ -145,6 +147,7 @@ class AddressSet extends React.Component {
 
   createRemoveFieldButton(i) {
     return (
+
       <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveEntry.bind(this, i)}/>
     );
   }
@@ -180,7 +183,8 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
+        <AddEntryButton onClick={this.handleAddAddress.bind(this)}/>
+        <RaisedButton label="Add More People" onClick={this.handleAddAddress} />
         <br></br>
         <TextField hintText="What's your name?" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
@@ -189,7 +193,7 @@ class AddressSet extends React.Component {
         <br></br>
         <br></br>
         <span>
-          <TextField hintText="What type of place are you looking for?" onChange={this.handleActivityChange.bind(this)}/>
+          <TextField hintText="What type of place are you looking for?" onChange={this.handleActivityChange}/>
           <RaisedButton type="submit" label="Submit" />
           </span>
       </form>
@@ -197,4 +201,4 @@ class AddressSet extends React.Component {
   }
 }
 
-export default AddressSet;
+export default EntrySet;
