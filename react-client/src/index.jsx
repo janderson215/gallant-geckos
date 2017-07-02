@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Midpoint from './Midpoint.jsx';
+import Midpoint from './components/Midpoint.jsx';
 
-ReactDOM.render(<App />, document.getElementById('app'));
-
+ReactDOM.render(<Midpoint />, document.getElementById('app'));

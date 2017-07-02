@@ -7,7 +7,7 @@ import dummy from '../dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
-import styles from '../app.css';
+import styles from '../geosuggest.css';
 import Paper from 'material-ui/Paper';
 
 class Midpoint extends React.Component {
