@@ -4,7 +4,8 @@ const express = require('express');
 const parseUrl = require('url-parse');
 const request = require('request');
 const rp = require('request-promise-native');
-const googleAPIkey = require('../keys') || require('src/key.js').googleAPIkey || process.env.googleAPIkey;
+const googleAPIkey = process.env.googleAPIkey ? process.env.googleAPIkey : require('src/key.js').googleAPIkey ? require('src/key.js').googleAPIkey : require('../keys');
+// const googleAPIkey = process.env.googleAPIkey || require('../keys') || require('src/key.js').googleAPIkey;
 const db = require('../db/db-helpers');
 
 const app = express();
