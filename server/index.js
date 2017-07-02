@@ -1,12 +1,18 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-//const io = require('socket.io')(express);
 const parseUrl = require('url-parse');
 const request = require('request');
 const rp = require('request-promise-native');
-//const googleAPIkey = process.env.googleAPIkey ? process.env.googleAPIkey : require('src/key.js').googleAPIkey ? require('src/key.js').googleAPIkey : require('../keys');
-const googleAPIkey = process.env.googleAPIkey // || require('../keys') || require('src/key.js').googleAPIkey;
 const db = require('../db/db-helpers');
+let googleAPIkey;
+
+if (process.env.googleAPIkey) {
+  console.log('Using ENV keys')
+  googleAPIkey = process.env.googleAPIkey;
+} else if (require('../keys.js').googleAPIkey) {
+  console.log('Using local keys')
+  googleAPIkey = require('../keys').googleAPIkey;
+}
 
 const app = express();
 
@@ -33,6 +39,8 @@ let lngSum = 0;
 let nearbySearchUrlSuffix;
 let photoUrlSuffix;
 
+//Convert addresses input by user to magical object and save to db
+  //returns the objectID in the POST response for future queries
 app.post('/addresses', (req, res) => {
   type = req.body.type;
   let people = req.body.people;
@@ -76,7 +84,7 @@ app.post('/addresses', (req, res) => {
         } else if(responseObject.status === 'ZERO_RESULTS') {
           nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
           nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
-          console.log('attempt 2 query string', nearbySearchUrl);
+          console.log('Not able to sort by distance. Finding locations by radius.');
           rp(nearbySearchUrl)
           .then(responseObject2 => {
             responseObject2 = JSON.parse(responseObject2);
@@ -87,6 +95,7 @@ app.post('/addresses', (req, res) => {
               radius = 50000;
               nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
               nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
+              console.log(`Not able locate target establishment within ${radius/1000}km. Expanding radius.`);
               rp(nearbySearchUrl)
               .then(responseObject3 => {
                 responseObject3 = JSON.parse(responseObject3);
@@ -149,11 +158,41 @@ app.post('/addresses', (req, res) => {
   });
 });
 
+//Return the Session ocument returned from the db query to the client
 app.get('/pointsOfInterest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 
   let id = req.query.id;
   db.findSession(id, res);
+});
+
+//SMS all parties involved
+app.post('/notifyFriends', (req, res) => {
+  let initiatorName = req.body.initiatorName;
+  let location = req.body.location;
+  let phoneNums = req.body.phoneNums;
+  let accountSid;
+  let authToken;
+  if (process.env.twilioSid) {
+    accountSid = process.env.twilioSid;
+    authToken = process.env.twilioToken;
+  } else {
+    accountSid = require('../keys').twilioSid;
+    authToken = require('../keys').twilioToken;
+  }
+  const client = require('twilio')(accountSid, authToken);
+  const messageBody = `${initiatorName} wants to meet you at ${location.name}. The address is ${location.address}` //
+
+  phoneNums.forEach(phoneNum => {
+    client.messages.create({
+      to: phoneNum,
+      from: '+19549457351',
+      body: messageBody
+    }, (err, message) => {
+      err ? res.status(500).send() : res.status(201).send(message.sid)
+    });
+  })
+
 });
 
 app.listen(process.env.PORT || 3000, function(){
