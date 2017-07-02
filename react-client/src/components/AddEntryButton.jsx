@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const AddEntryButton = (props) => (
+const AddEntryButton = ({addEntry}) => (
   <RaisedButton
     label="Add More People"
-    onClick={props.handleAddAddress}
+    onClick={addEntry}
   />
 );
 
