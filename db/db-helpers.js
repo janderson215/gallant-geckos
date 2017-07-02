@@ -28,10 +28,17 @@ let saveSessionModel = ((data,res) => {
 
 
 let findSession = ((id, res) => {
-  Session.findById(id).exec()
-  .then(session => {
+  let session = Session.findById(id).exec()
+  session.then(session => {
     // create properly formatted object from session and POI data
+    console.log('session data', session);
+    let responseObject = {
+      initiatorName: session.initiator_name,
+      pointsOfInterest: session.recommended_destinations,
+      phoneNums: session.phone_numbers
+    };
     // send object back in get response
+    res.status(200).send(responseObject);
   })
   .catch(err => console.log('Error finding Session: ', err));
 });

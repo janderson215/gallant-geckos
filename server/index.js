@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const rp = require('request-promise-native');
+const parseUrl = require('url-parse');
 const googleAPIkey = require('../keys') || require('src/key.js').googleAPIkey || process.env.googleAPIkey;
 const db = require('../db/db-helpers');
 
@@ -144,11 +145,10 @@ app.post('/addresses', (req, res) => {
 
 //Pulling from the DB
 app.get('/pointsOfInterest', (req, res) => {
-  console.log(pointsOfInterest);
-  initiatorName: req.body.
-  //find from db
-  //
-  res.status(200).send(pointsOfInterest);
+  console.log('Pulling POIs by Session ID');
+
+  let id = req.originalUrl.slice(21);
+  db.findSession(id, res);
 });
 
 app.listen(process.env.PORT || 3000, function(){
