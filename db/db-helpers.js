@@ -17,16 +17,6 @@ var db = mongoose.connection;
 // db.dropDatabase();
 
 // API returns an array of object
-// pass in object into Session model to create instance of session data
-var session = new Session({
-  session_type: 'meet with others', // default for MVP
-  initiator_name: 'Wilson ', // ??? 
-  location_type: 'coffee',
-  phone_numbers: phoneNums,
-  recommended_destinations: [saveRecommendResult()]
-});
-
-// API returns an array of object
 // pass in object into Recommendation model to create instance of recommendResult data
 var recommendResult = new Recommendation({
   name: pointsOfInterest.name,
@@ -35,12 +25,22 @@ var recommendResult = new Recommendation({
   photo_url: pointsOfInterest.photo
 });
 
-let saveSessionModel = session.save(function(err) {
+let saveRecommendResult = recommendResult.save(function(err) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessionTest saved');
 });
 
-let saveRecommendResult = recommendResult.save(function(err) {
+// API returns an array of object
+// pass in object into Session model to create instance of session data
+var session = new Session({
+  session_type: 'meet with others', // default for MVP
+  initiator_name: 'Wilson ', // ??? 
+  location_type: 'coffee',
+  phone_numbers: phoneNums,
+  //recommended_destinations: [saveRecommendResult] //Paul removed invocation, but this needs to be passed an array of objects structured like the schema
+});
+
+let saveSessionModel = session.save(function(err) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessionTest saved');
 });
