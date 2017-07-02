@@ -16,10 +16,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
+<<<<<<< HEAD
       recommendedPlaceIframe: this.handleDummyData(),
       recommendedPlaces: dummy,
     //  recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
 
+=======
+      iframe: this.handleDummyData(),
+      data: null
+>>>>>>> (styling) Moved 'Add More Addresses' Button to the top of the list
     };
     this.handleSelectResult = this.handleSelectResult.bind(this);
   }
