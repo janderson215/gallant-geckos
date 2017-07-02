@@ -8,6 +8,7 @@ import rrui from 'react-phone-number-input/rrui.css';
 import rpni from 'react-phone-number-input/style.css';
 import Divider from 'material-ui/Divider';
 import AddEntryButton from './AddEntryButton.jsx';
+import AddressField from './AddressField.jsx';
 
 class EntrySet extends React.Component {
   constructor(props) {
@@ -112,13 +113,11 @@ class EntrySet extends React.Component {
 
   createGeosuggest(i) {
     return (
-      <Geosuggest
-        placeholder={`Address #${i + 1}`}
-        ref={el => this._geoSuggest = el}
+      <AddressField i={i} 
         onChange={this.handleAddressChange.bind(this, i)}
-        onSuggestSelect={this.onSuggestSelect.bind(this, i)}
         initialValue={this.state.addresses[i] || ''}
-      />
+        onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+        />
     );
   }
 
@@ -183,7 +182,6 @@ class EntrySet extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}> 
         <AddEntryButton addEntry={this.handleAddAddress} />
-        {/*<RaisedButton label="Add More People" onClick={this.handleAddAddress} />*/}
         <br></br>
         <TextField hintText="What's your name?" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
