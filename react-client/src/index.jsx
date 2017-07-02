@@ -15,7 +15,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      iframe: this.handleDummyData()
+      iframe: this.handleDummyData(),
+      data: null
     };
   }
 
@@ -29,7 +30,9 @@ class App extends React.Component {
 
   handleSubmit (data) {
     console.log(`the client has submitted "${(JSON.stringify(data))}"`);
-
+    this.setState({
+      data: data
+    });
     // make ajax calls
     $.ajax({
       url: '/addresses',
