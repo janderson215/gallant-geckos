@@ -1,6 +1,4 @@
 import React from 'react';
-import Geosuggest from 'react-geosuggest';
-import styles from '../geosuggest.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
@@ -8,7 +6,8 @@ import rrui from 'react-phone-number-input/rrui.css';
 import rpni from 'react-phone-number-input/style.css';
 import Divider from 'material-ui/Divider';
 import AddEntryButton from './AddEntryButton.jsx';
-import AddressField from './AddressField.jsx';
+import Address from './AddressField.jsx';
+import EntryField from './EntryField.jsx';
 
 class EntrySet extends React.Component {
   constructor(props) {
@@ -113,7 +112,7 @@ class EntrySet extends React.Component {
 
   createGeosuggest(i) {
     return (
-      <AddressField i={i} 
+      <Address i={i} 
         onChange={this.handleAddressChange.bind(this, i)}
         initialValue={this.state.addresses[i] || ''}
         onSuggestSelect={this.onSuggestSelect.bind(this, i)}
