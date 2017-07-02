@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import LocationsEntrySet from './components/LocationsEntryForm.jsx';
+import EntrySet from './components/EntryForm.jsx';
 import Iframe from 'react-iframe';
 import dummy from './dummy-data.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -16,15 +16,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-<<<<<<< HEAD
       recommendedPlaceIframe: this.handleDummyData(),
       recommendedPlaces: dummy,
     //  recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
 
-=======
-      iframe: this.handleDummyData(),
-      data: null
->>>>>>> (styling) Moved 'Add More Addresses' Button to the top of the list
     };
     this.handleSelectResult = this.handleSelectResult.bind(this);
   }
@@ -79,22 +74,23 @@ class App extends React.Component {
   render () {
     console.log('First Render');
     return (
-      <div className="render-app">
-        <MuiThemeProvider> 
+      <div>
+        <MuiThemeProvider>
           <Paper zDepth={1}>
+
               <AppBar title="Midpoint" showMenuIconButton={false} />
-                <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.state.recommendPlaceIframe}
-                width="450px"
-                height="450px"
-                display="initial"
-                position="relative"
-                />
-            </Paper>
-          </MuiThemeProvider>
-        <ResultsList handleSelectResult={this.handleSelectResult}
-                     recommendedPlaces={this.state.recommendedPlaces}
-        />
+                <EntrySet onSubmit={this.handleSubmit.bind(this)}/>
+                <Iframe url={this.state.iframe}
+                  width="450px"
+                  height="450px"
+                  display="initial"
+                  position="relative"
+                  />
+              </Paper>
+            </MuiThemeProvider>
+          <ResultsList handleSelectResult={this.handleSelectResult}
+                      recommendedPlaces={this.state.recommendedPlaces}
+          />
       </div>
     );
   }
