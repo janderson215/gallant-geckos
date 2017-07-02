@@ -9,14 +9,36 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import styles from './app.css';
 import Paper from 'material-ui/Paper';
-// import BottomNavigation from 'material-ui/BottomNavigation';
+import ResultsList from './components/ResultsList.jsx';
+import BottomNavigation from 'material-ui/BottomNavigation';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      iframe: this.handleDummyData()
+      recommendedPlaceIframe: this.handleDummyData(),
+      recommendedPlaces: dummy,
+    //  recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
+
     };
+    this.handleSelectResult = this.handleSelectResult.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
+    });
+  }
+
+  handleSelectResult(recommendedPlaceClicked) {
+    console.log('clicked on: ', recommendedPlaceClicked.name);
+    let iframeLong = recommendedPlaceClicked.iframe;
+    let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    console.log('passing into iframe: ', iframeURL);
+    this.setState({
+      recommendPlaceIframe: `https:${iframeURL}`
+    });
+    console.log(this.state.recommendPlaceIframe);
   }
 
   handleDummyData() {
@@ -28,9 +50,8 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
-    console.log(`the client has submitted "${(JSON.stringify(data))}"`);
-
-    // make ajax calls
+    console.log(`client submits: "${JSON.stringify(data)}"`);
+    let that = this;
     $.ajax({
       url: '/addresses',
       method: 'POST',
@@ -40,30 +61,36 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          console.log(data);
+          console.log('data response from post: ', data);
+          this.setState({
+            recommendedPlaces: data,
+            recommendedPlaceIframe: handleSelectResult(data[0])
+          });
         }
       }
     });
   }
 
-
   render () {
     console.log('First Render');
     return (
-      <MuiThemeProvider>
-        <Paper zDepth={1}>
-          <span>
+      <div className="render-app">
+        <MuiThemeProvider>
+          <div>
             <AppBar title="Midpoint" />
               <LocationsEntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.state.iframe}
-                width="450px"
-                height="450px"
-                display="initial"
-                position="relative"
-                />
-          </span>
-        </Paper>
-      </MuiThemeProvider>
+            <Iframe url={this.state.recommendPlaceIframe}
+              width="450px"
+              height="450px"
+              display="initial"
+              position="relative"
+              />
+          </div>
+        </MuiThemeProvider>
+        <ResultsList handleSelectResult={this.handleSelectResult}
+                     recommendedPlaces={this.state.recommendedPlaces}
+        />
+      </div>
     );
   }
 }

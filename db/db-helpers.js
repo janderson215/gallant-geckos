@@ -32,8 +32,7 @@ let findSession = ((id, res) => {
   .catch(err => console.log('Error finding Session: ', err));
 });
 
-
 module.exports = {
   saveSessionModel : saveSessionModel,
   findSession : findSession
-}
+};
