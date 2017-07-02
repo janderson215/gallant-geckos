@@ -10,6 +10,8 @@ import AppBar from 'material-ui/AppBar';
 import styles from '../app.css';
 import Paper from 'material-ui/Paper';
 
+
+// move paul's things in here
 class Midpoint extends React.Component {
   constructor(props) {
     super(props);
