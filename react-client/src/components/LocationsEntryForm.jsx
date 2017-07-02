@@ -180,13 +180,13 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
+        <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
         <TextField hintText="What's your name?" onChange={this.handleNameChange.bind(this)}/>
         {this.createForm()}
         <br></br>
         <br></br>
         <br></br>
-        <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
         <span>
           <TextField hintText="What type of place are you looking for?" onChange={this.handleActivityChange.bind(this)}/>
