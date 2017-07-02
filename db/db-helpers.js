@@ -10,6 +10,7 @@ let saveSessionModel = ((data,res) => {
   saveSession = session.save()
   saveSession.then(document => {
     console.log('Session saved');
+    
     res.status(201).send(document._id);
   })
   .catch(err => console.log('Error saving session:', err))

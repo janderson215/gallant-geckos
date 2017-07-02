@@ -1,8 +1,9 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const express = require('express');
+//const io = require('socket.io')(express);
+const parseUrl = require('url-parse');
 const request = require('request');
 const rp = require('request-promise-native');
-const parseUrl = require('url-parse');
 const googleAPIkey = require('../keys') || require('src/key.js').googleAPIkey || process.env.googleAPIkey;
 const db = require('../db/db-helpers');
 
@@ -14,6 +15,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 
 const nearbySearchUrlPrefix = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=';
 const iframePrefix = '<iframe src="https://www.google.com/maps/embed/v1/place?q=';
+const photoUrlPrefix = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=`;
 
 let addresses = [];
 let geocodedAddresses = [];
@@ -24,10 +26,11 @@ let session;
 let type;
 let address;
 let coords;
-let radius;
+let radius = 10000;
 let latSum = 0;
 let lngSum = 0;
 let nearbySearchUrlSuffix;
+let photoUrlSuffix;
 
 app.post('/addresses', (req, res) => {
   type = req.body.type;
@@ -36,7 +39,6 @@ app.post('/addresses', (req, res) => {
   let sessionType = 'meet with others';
   
   let geocodeAddresses = new Promise((resolve, reject) => {
-    console.log(googleAPIkey)
     people.forEach(person => {
       phoneNums.push(person.phone);
       address = person.address.split(' ').join('+');
@@ -71,8 +73,7 @@ app.post('/addresses', (req, res) => {
           console.log('pointsOfInterest set on 1st attempt');
           resolve(responseObject.results);
         } else if(responseObject.status === 'ZERO_RESULTS') {
-          radius = 10000;
-          nearbySearchUrlSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+          nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
           nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
           console.log('attempt 2 query string', nearbySearchUrl);
           rp(nearbySearchUrl)
@@ -83,7 +84,7 @@ app.post('/addresses', (req, res) => {
               resolve(responseObject2.results);
             } else if (responseObject2.status === 'ZERO_RESULTS') {
               radius = 50000;
-              nearbySearchUrlSuffix = `${currentMidpoint}&radius={radius}&type=${type}&key=${googleAPIkey}`
+              nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
               nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
               rp(nearbySearchUrl)
               .then(responseObject3 => {
@@ -92,29 +93,34 @@ app.post('/addresses', (req, res) => {
                   console.log('pointsOfInterest set on 3rd attempt');
                   resolve(responseObject3.results);
                 } else {
-                  console.log('Error on Attempt 3');
+                  console.log('Error on Attempt 3:', responseObject3.status);
                 }
               })
               .catch(err => console.log('Caught error on Attempt 3:', err))
             } else {
-              console.log('Error on Attempt 2')
+              console.log('Error on Attempt 2:', responseObject2.status)
             }
           })
           .catch(err => console.log('Caught error on Attempt 2: ', err))
         } else {
-          console.log('Error on Attempt 1');
+          console.log('Error on Attempt 1:', responseObject.status);
         }
       })
       .catch(err => console.log('Nearby Search API error: ', err));
     });
 
     nearbySearch.then(nearbySearchResults => {
-      //save to db here
       pointsOfInterest = nearbySearchResults;
 
       pointsOfInterest.forEach(pointOfInterest => {
         pointOfInterest.address = pointOfInterest.vicinity;
         pointOfInterest.iframe_string = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`;
+        if (pointOfInterest.photos) {
+          photoUrlSuffix = pointOfInterest.photos[0].photo_reference;
+          pointOfInterest.photo_url = photoUrlPrefix.concat(photoUrlSuffix, `&key=${googleAPIkey}`);
+        } else {
+          pointOfInterest.photo_url = pointOfInterest.icon;
+        }
       });
 
       const sessionObject = {
@@ -135,7 +141,6 @@ app.post('/addresses', (req, res) => {
 
       writeSession.then(session => {
         console.log('session', session);
-        res.status(201).send('Object id', session._id);
       })
       .catch(err => res.status(500).send());
     })
@@ -143,7 +148,6 @@ app.post('/addresses', (req, res) => {
   });
 });
 
-//Pulling from the DB
 app.get('/pointsOfInterest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 
