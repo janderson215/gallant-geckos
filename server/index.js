@@ -147,7 +147,7 @@ app.post('/addresses', (req, res) => {
 app.get('/pointsOfInterest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 
-  let id = req.originalUrl.slice(21);
+  let id = req.query.id;
   db.findSession(id, res);
 });
 

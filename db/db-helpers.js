@@ -1,16 +1,6 @@
 const mongoose = require('mongoose');
 const Session = require('./index').session;
-// const Location = require('./index').location;
-// const Attendee = require('./index').attendee;
 const Recommendation = require('./index').recommendation;
-
-// const sampleData = require('../sampleOutputObject.js');
-// const pointsOfInterest = sampleData.pointsOfInterest;
-// const phoneNums = sampleData.phoneNums;
-
-// console.log(sampleData[0].name)
-// console.log('sampleOutputObject.js: ', sampleData)
-// var data = sampleData[0];
 
 mongoose.connect('mongodb://localhost/sessions');
 var db = mongoose.connection;
@@ -21,7 +11,6 @@ let saveSessionModel = ((data,res) => {
   saveSession.then(document => {
     console.log('Session saved');
     res.status(201).send(document._id);
-    // return document;
   })
   .catch(err => console.log('Error saving session:', err))
 });
@@ -30,15 +19,14 @@ let saveSessionModel = ((data,res) => {
 let findSession = ((id, res) => {
   let session = Session.findById(id).exec()
   session.then(session => {
-    // create properly formatted object from session and POI data
-    console.log('session data', session);
-    let responseObject = {
+    console.log('Session data:', session);
+    let responseData = {
       initiatorName: session.initiator_name,
       pointsOfInterest: session.recommended_destinations,
       phoneNums: session.phone_numbers
     };
-    // send object back in get response
-    res.status(200).send(responseObject);
+
+    res.status(200).send(responseData);
   })
   .catch(err => console.log('Error finding Session: ', err));
 });
