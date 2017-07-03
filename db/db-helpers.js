@@ -5,13 +5,13 @@ const Recommendation = require('./index').recommendation;
 if (process.env.dbfilepath) {
   var dbfilepath = process.env.dbfilepath;
 // } else if (fs.existsSync('../keys.js')) {
-// } else {
-//   var dbfilepath = require('../keys.js').dbfilepath;
+} else {
+  var dbfilepath = require('../keys.js').dbfilepath;
 }
-// test
+//test rebuild
 
 console.log('---dbfilepath from process.env: ---', dbfilepath);
-// console.log('---MONGODB_URI: ---', MONGODB_URI);
+console.log('---MONGODB_URI: ---', process.env.MONGODB_URI);
 
 
 mongoose.connect(dbfilepath);

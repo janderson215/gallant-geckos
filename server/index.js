@@ -9,11 +9,11 @@ const db = require('../db/db-helpers');
 if (process.env.googleAPIkey) {
   var googleAPIkey = process.env.googleAPIkey;
 // } else if (fs.existsSync('../keys')) {
-// } else if (require('../keys')) {
-  // var googleAPIkey = require('../keys').googleAPIkey;
+} else if (require('../keys')) {
+  var googleAPIkey = require('../keys').googleAPIkey;
 // } else if (fs.existsSync('src/key')) {
-// } else {
-  // var googleAPIkey = require('src/key').googleAPIkey;
+} else {
+  var googleAPIkey = require('src/key').googleAPIkey;
 }
 
 const app = express();
