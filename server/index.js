@@ -1,20 +1,18 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-// const fs = require('fs');
-// const io = require('socket.io')(express);
 const parseUrl = require('url-parse');
 const request = require('request');
 const rp = require('request-promise-native');
 const db = require('../db/db-helpers');
-if (process.env.googleAPIkey) {
-  var googleAPIkey = process.env.googleAPIkey;
-// } else if (fs.existsSync('../keys')) {
-} else if (require('../keys')) {
-  var googleAPIkey = require('../keys').googleAPIkey;
-// } else if (fs.existsSync('src/key')) {
-} else {
-  var googleAPIkey = require('src/key').googleAPIkey;
-}
+let GOOGLEKEY;
+
+if (process.env.GOOGLEKEY) {
+  console.log('Using ENV keys')
+  GOOGLEKEY = process.env.GOOGLEKEY;
+} /* else {
+  console.log('Using local keys')
+  GOOGLEKEY = require('../keys').GOOGLEKEY;
+} */ //uncomment for local
 
 const app = express();
 
@@ -41,6 +39,8 @@ let lngSum = 0;
 let nearbySearchUrlSuffix;
 let photoUrlSuffix;
 
+//Convert addresses input by user to magical object and save to db
+  //returns the objectID in the POST response for future queries
 app.post('/addresses', (req, res) => {
   type = req.body.type;
   let people = req.body.people;
@@ -51,7 +51,7 @@ app.post('/addresses', (req, res) => {
     people.forEach(person => {
       phoneNums.push(person.phone);
       address = person.address.split(' ').join('+');
-      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleAPIkey}`;
+      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLEKEY}`;
       rp(geocodingUrl)
       .then(geocodedObject => {
         geocodedAddresses.push([(JSON.parse(geocodedObject).results[0].geometry.location.lat),
@@ -70,7 +70,7 @@ app.post('/addresses', (req, res) => {
       lngSum += Number(geocodedAddress[1]);
     });
     currentMidpoint = [(latSum/geocodedAddresses.length).toFixed(7),(lngSum/geocodedAddresses.length).toFixed(7)];
-    nearbySearchUrlSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${googleAPIkey}`;
+    nearbySearchUrlSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${GOOGLEKEY}`;
   })
   .then(() => {
     const nearbySearch = new Promise((resolve, reject) => {
@@ -82,9 +82,9 @@ app.post('/addresses', (req, res) => {
           console.log('pointsOfInterest set on 1st attempt');
           resolve(responseObject.results);
         } else if(responseObject.status === 'ZERO_RESULTS') {
-          nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
+          nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${GOOGLEKEY}`
           nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
-          console.log('attempt 2 query string', nearbySearchUrl);
+          console.log('Not able to sort by distance. Finding locations by radius.');
           rp(nearbySearchUrl)
           .then(responseObject2 => {
             responseObject2 = JSON.parse(responseObject2);
@@ -93,8 +93,9 @@ app.post('/addresses', (req, res) => {
               resolve(responseObject2.results);
             } else if (responseObject2.status === 'ZERO_RESULTS') {
               radius = 50000;
-              nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${googleAPIkey}`
+              nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${GOOGLEKEY}`
               nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
+              console.log(`Not able locate target establishment within ${radius/1000}km. Expanding radius.`);
               rp(nearbySearchUrl)
               .then(responseObject3 => {
                 responseObject3 = JSON.parse(responseObject3);
@@ -123,10 +124,10 @@ app.post('/addresses', (req, res) => {
 
       pointsOfInterest.forEach(pointOfInterest => {
         pointOfInterest.address = pointOfInterest.vicinity;
-        pointOfInterest.iframe_string = `${iframePrefix.concat(address)}&zoom=17&key=${googleAPIkey}"></iframe>`;
+        pointOfInterest.iframe_string = `${iframePrefix.concat(address)}&zoom=17&key=${GOOGLEKEY}"></iframe>`;
         if (pointOfInterest.photos) {
           photoUrlSuffix = pointOfInterest.photos[0].photo_reference;
-          pointOfInterest.photo_url = photoUrlPrefix.concat(photoUrlSuffix, `&key=${googleAPIkey}`);
+          pointOfInterest.photo_url = photoUrlPrefix.concat(photoUrlSuffix, `&key=${GOOGLEKEY}`);
         } else {
           pointOfInterest.photo_url = pointOfInterest.icon;
         }
@@ -157,11 +158,41 @@ app.post('/addresses', (req, res) => {
   });
 });
 
+//Return the Session document returned from the db query to the client
 app.get('/pointsOfInterest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 
   let id = req.query.id;
   db.findSession(id, res);
+});
+
+//SMS all parties involved
+app.post('/notifyParties', (req, res) => {
+  let initiatorName = req.body.initiatorName;
+  let location = req.body.location;
+  let phoneNums = req.body.phoneNums;
+  let accountSid;
+  let authToken;
+  if (process.env.twilioSid) {
+    accountSid = process.env.twilioSid;
+    authToken = process.env.twilioToken;
+  } else {
+    accountSid = require('../keys').twilioSid;
+    authToken = require('../keys').twilioToken;
+  }
+  const client = require('twilio')(accountSid, authToken);
+  const messageBody = `${initiatorName} wants to meet you at ${location.name}. The address is ${location.address}` //
+
+  phoneNums.forEach(phoneNum => {
+    client.messages.create({
+      to: phoneNum,
+      from: '+19549457351',
+      body: messageBody
+    }, (err, message) => {
+      err ? res.status(500).send() : res.status(201).send(message.sid)
+    });
+  })
+
 });
 
 app.listen(process.env.PORT || 3000, function(){
