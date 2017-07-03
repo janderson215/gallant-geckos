@@ -8,7 +8,7 @@ if (process.env.dbfilepath) {
 console.log('---dbfilepath from process.env: ---', dbfilepath);
 // console.log('---MONGODB_URI: ---', MONGODB_URI);
 
-mongoose.connect('mongodb://localhost/sessions'); // uncomment-out for local
+// mongoose.connect('mongodb://localhost/sessions'); // uncomment-out for local
 mongoose.connect(dbfilepath); // uncomment-out for production
 // var db = mongoose.connection;    
 
