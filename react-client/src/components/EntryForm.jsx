@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider';
 import AddEntryButton from './AddEntryButton.jsx';
 import AddressField from './AddressField.jsx';
 import PhoneNumberField from './PhoneNumberField.jsx';
-import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
+import isValidPhoneNumber from 'react-phone-number-input';
 import RemoveEntryButton from './RemoveField.jsx';
 
 
@@ -101,6 +101,7 @@ class EntrySet extends React.Component {
   }
 
   onSuggestSelect(i, suggest) {
+    console.log(suggest.label);
     // console.log(`${i} ${suggest.label}`);
     let addresses = this.state.addresses.slice();
     addresses[i] = suggest.label;
@@ -117,45 +118,6 @@ class EntrySet extends React.Component {
       phoneNumbers
     });
   }
-  // createGeosuggest(i) {
-  //   return (
-  //     <Address i={i} 
-  //       onChange={this.handleAddressChange.bind(this, i)}
-  //       initialValue={this.state.addresses[i] || ''}
-  //       onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-  //       />
-  //   );
-  // }
-
-  // createPhoneNumberField(i) {
-  //   return (
-  //     // <input 
-  //     //   type="text" 
-  //     //   value={this.state.phoneNumbers[i] || ''}
-  //     //   placeholder={`Phone Number #${i + 1}`}
-  //     //   onChange={this.handlePhoneNumberChange.bind(this, i)}
-  //     // />
-  //     <Phone 
-  //       className="phone"
-  //       placeholder={`Phone Number #${i + 1}`}
-  //       onChange={ phone => {
-  //         let phoneNumbers = this.state.phoneNumbers.slice();
-  //         phoneNumbers[i] = phone;
-  //         this.setState({
-  //           phoneNumbers
-  //         });
-  //       }}
-  //       value={this.state.phoneNumbers[i] || ''}
-  //       country="US"
-  //       />
-  //   );
-  // }
-
-  // createRemoveFieldButton(i) {
-  //   return (
-  //     <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveEntry.bind(this, i)}/>
-  //   );
-  // }
 
   createForm() {
     // have it to make entries instead
@@ -167,9 +129,9 @@ class EntrySet extends React.Component {
             <AddressField
               i={i}
               onChange={this.handleAddressChange.bind(this, i)}
-              onSuggest={this.onSuggestSelect.bind(this, i)}
-              initialValue={this.state.addresses[i] || ''}
-              />
+              // important to have the onSuggestSelect be the same prop name as from the Docs
+              onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+              initialValue={this.state.addresses[i] || ''} />
             <PhoneNumberField
               i={i}
               value={this.state.phoneNumbers[i] || ''}
@@ -186,16 +148,14 @@ class EntrySet extends React.Component {
             <AddressField 
               i={i}
               onChange={this.handleAddressChange.bind(this, i)}
-              onSuggest={this.onSuggestSelect.bind(this, i)}
-              initialValue={this.state.addresses[i] || ''}/>
+              onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+              initialValue={this.state.addresses[i] || ''} />
+            <RemoveEntryButton 
+              removeEntry={this.handleRemoveEntry.bind(this, i)} />
             <PhoneNumberField 
               i={i}
               onChange={this.onPhoneChange.bind(this, i)}
-              value={this.state.phoneNumbers[i] || ''}
-              />
-            <RemoveEntryButton 
-              removeEntry={this.handleRemoveEntry.bind(this, i)}
-              />
+              value={this.state.phoneNumbers[i] || ''} />
             <br></br>
             <Divider />
             <br></br>            
@@ -209,11 +169,14 @@ class EntrySet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <AddEntryButton addEntry={this.handleAddAddress}/>
+        <AddEntryButton 
+          addEntry={this.handleAddAddress} />
         <br></br>
         <TextField 
           hintText="What's your name?" 
-          onChange={this.handleNameChange.bind(this)}/>
+          onChange={this.handleNameChange.bind(this)} />
+        <br></br>
+        <Divider />
         {this.createForm()}
         <br></br>
         <br></br>
@@ -222,8 +185,10 @@ class EntrySet extends React.Component {
         <span>
           <TextField 
             hintText="What type of place are you looking for?" 
-            onChange={this.handleActivityChange}/>
-          <RaisedButton type="submit" label="Submit"/>
+            onChange={this.handleActivityChange} />
+          <RaisedButton 
+            type="submit" 
+            label="Submit" />
           </span>
       </form>
     );
