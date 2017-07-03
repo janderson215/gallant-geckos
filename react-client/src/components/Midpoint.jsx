@@ -102,14 +102,15 @@ class App extends React.Component {
   }
 
   notifyParties(data) {
+    let that = this;
     $.ajax({
       method: 'POST',
       url: '/notify-parties',
       data: {
-        initiatorName: this.state.data.initiator,
+        initiatorName: that.state.data.initiator,
         location: {
-          name: this.state.recommendedPlaceClick.name,
-          address: this.state.recommendedPlaceClick.address
+          name: that.state.recommendedPlaceClick.name,
+          address: that.state.recommendedPlaceClick.address
         },
         phoneNums: data.phoneNumbers
       },
