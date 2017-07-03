@@ -16,14 +16,14 @@ class App extends React.Component {
     super(props);
     this.state = { 
       recommendedPlaceIframe: this.handleDummyData(),
-      recommendedPlaces: dummy,
+      recommendedPlaces: dummy.pointsOfInterest,
       recommendedPlaceAddress: null,
       recommendedPlaceName: null,
       sessionID: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectResult = this.handleSelectResult.bind(this);
-    this.notifyFriends = this.notifyFriends.bind(this);
+    this.notifyParties = this.notifyParties.bind(this);
   }
 
   componentDidMount () {
@@ -34,8 +34,8 @@ class App extends React.Component {
 
   handleSelectResult (recommendedPlaceClick) {
     console.log('clicked on: ', recommendedPlaceClick.name);
-    let iframeLong = recommendedPlaceClick.iframe;
-    let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    let iframeLong = recommendedPlaceClick.iframe_string;
+    let iframeURL = iframeLong.slice(19, iframeLong.length - 11);
     console.log('passing into iframe: ', iframeURL);
     this.setState({
       recommendedPlaceIframe: `https:${iframeURL}`,
@@ -46,9 +46,9 @@ class App extends React.Component {
   } 
 
   handleDummyData () {
-    let data = dummy[0].iframe.toString();
+    let data = dummy.pointsOfInterest[0].iframe_string.toString();
     console.log(data);
-    let url = data.slice(13, (data.length - 11));
+    let url = data.slice(19, (data.length - 11));
     console.log(`https:${url}`);
     return `https:${url}`;
   }
@@ -79,6 +79,7 @@ class App extends React.Component {
   }
 
   fetchPlaces() {
+    let that = this;
     $.ajax({
       method: 'GET',
       url: '/points-of-interest',
@@ -87,7 +88,7 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          this.setState({
+          that.setState({
             recommendedPlaces: data.pointsOfInterest
           });
         }
@@ -100,15 +101,17 @@ class App extends React.Component {
     });
   }
 
-  notifyFriends(data) {
+  notifyParties(data) {
+    console.log('***** notify parties data', data)
+    let that = this;
     $.ajax({
       method: 'POST',
       url: '/notify-parties',
       data: {
-        initiatorName: this.state.data.initiator,
+        initiatorName: that.state.data.initiator,
         location: {
-          name: this.state.recommendedPlaceClick.name,
-          address: this.state.recommendedPlaceClick.address
+          name: that.state.recommendedPlaceName,
+          address: that.state.recommendedPlaceAddress
         },
         phoneNums: data.phoneNumbers
       },
@@ -133,7 +136,7 @@ class App extends React.Component {
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <EntrySet onSubmit={this.handleSubmit} notifyFriends={this.notifyFriends}/>
+              <EntrySet onSubmit={this.handleSubmit} notifyParties={this.notifyParties}/>
               <Iframe   
                 url={this.state.recommendedPlaceIframe}
                 width="450px"

@@ -7,7 +7,7 @@ import AddressField from './AddressField.jsx';
 import PhoneNumberField from './PhoneNumberField.jsx';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import RemoveEntryButton from './RemoveFieldButton.jsx';
-import NotifyFriendsButton from './NotifyFriendsButton.jsx';
+import NotifyPartiesButton from './NotifyPartiesButton.jsx';
 
 class EntrySet extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class EntrySet extends React.Component {
     this.handleAddAddress = this.handleAddAddress.bind(this);
     this.handleActivityChange = this.handleActivityChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
-    this.notifyFriends = this.notifyFriends.bind(this);
+    this.notifyParties = this.notifyParties.bind(this);
   }
 
   handleActivityChange(e) {
@@ -112,7 +112,7 @@ class EntrySet extends React.Component {
     });
   }
 
-  notifyFriends(event) {
+  notifyParties(event) {
     event.preventDefault();
     console.log('form click notify friends');
 
@@ -120,7 +120,7 @@ class EntrySet extends React.Component {
       phoneNumbers: this.state.phoneNumbers
     };
     // callback to adjust the parent state
-    this.props.notifyFriends(notificationData);
+    this.props.notifyParties(notificationData);
   }
 
   createForm() {
@@ -193,8 +193,8 @@ class EntrySet extends React.Component {
           <RaisedButton 
             type="submit" 
             label="Submit" />
-          <NotifyFriendsButton 
-            notifyFriends={this.notifyFriends} />
+          <NotifyPartiesButton 
+            notifyParties={this.notifyParties} />
           </span>
       </form>
     );
