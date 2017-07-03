@@ -191,6 +191,7 @@ class EntrySet extends React.Component {
             hintText="What type of place are you looking for?" 
             onChange={this.handleActivityChange} />
           <RaisedButton 
+            primary={true}
             type="submit" 
             label="Submit" />
           <NotifyPartiesButton 

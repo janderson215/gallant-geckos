@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const AddEntryButton = ({addEntry}) => (
   <RaisedButton
+    primary={true}
     label="Add More People"
     onClick={addEntry}
   />

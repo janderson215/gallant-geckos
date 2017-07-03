@@ -159,9 +159,9 @@ app.post('/notify-parties', (req, res) => {
   let phoneNums = req.body.phoneNums;
   let accountSid;
   let authToken;
-  if (process.env.twilioSid) {
-    accountSid = process.env.twilioSid;
-    authToken = process.env.twilioToken;
+  if (process.env.TWILIOSID) {
+    accountSid = process.env.TWILIOSID;
+    authToken = process.env.TWILIOTOKEN;
   } /*else {
     accountSid = require('../keys').TWILIOSID;
     authToken = require('../keys').TWILIOTOKEN;
@@ -175,7 +175,7 @@ app.post('/notify-parties', (req, res) => {
       from: '+19549457351',
       body: messageBody
     }, (err, message) => {
-      console.log('done');
+      console.log('Message sent');
       if (err) {
         res.statusCode = 500;
         throw err;

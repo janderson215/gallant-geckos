@@ -31,7 +31,6 @@ let saveSessionModel = ((data,res) => {
 let findSession = ((id, res) => {
   let session = Session.findById(id).exec()
   session.then(session => {
-    console.log('Session data:', session);
     let responseData = {
       initiatorName: session.initiator_name,
       pointsOfInterest: session.recommended_destinations,
