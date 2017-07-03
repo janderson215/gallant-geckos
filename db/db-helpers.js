@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 const Session = require('./index').session;
 const Recommendation = require('./index').recommendation;
+// const fs = require('fs');
 if (process.env.dbfilepath) {
   var dbfilepath = process.env.dbfilepath;
+// } else if (fs.existsSync('../keys.js')) {
 } else {
   var dbfilepath = require('../keys.js').dbfilepath;
 }
+
 
 mongoose.connect(dbfilepath);
 var db = mongoose.connection;
