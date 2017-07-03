@@ -38,5 +38,6 @@ package-lock.json
 # APIs
 keys.js
 react-client/src/key.js
+react-client/key.js
 
 .DS_Store
