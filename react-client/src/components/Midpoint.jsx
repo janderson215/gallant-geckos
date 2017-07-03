@@ -102,6 +102,7 @@ class App extends React.Component {
   }
 
   notifyParties(data) {
+    console.log('***** notify parties data', data)
     let that = this;
     $.ajax({
       method: 'POST',

@@ -9,7 +9,7 @@ let GOOGLEKEY;
 if (process.env.GOOGLEKEY) {
   console.log('Using ENV keys')
   GOOGLEKEY = process.env.GOOGLEKEY;
-} /* else {
+} /*else {
   console.log('Using local keys')
   GOOGLEKEY = require('../keys').GOOGLEKEY;
 } // */ //uncomment for local
@@ -162,7 +162,7 @@ app.post('/notify-parties', (req, res) => {
   if (process.env.twilioSid) {
     accountSid = process.env.twilioSid;
     authToken = process.env.twilioToken;
-  } /* else {
+  } /*else {
     accountSid = require('../keys').TWILIOSID;
     authToken = require('../keys').TWILIOTOKEN;
   } // */
@@ -175,9 +175,17 @@ app.post('/notify-parties', (req, res) => {
       from: '+19549457351',
       body: messageBody
     }, (err, message) => {
-      err ? res.status(500).send(err) : res.status(201).send(message.sid)
+      console.log('done');
+      if (err) {
+        res.statusCode = 500;
+        throw err;
+      } else {
+        res.statusCode = 201;
+      }
     });
-  })
+  });
+
+  res.send();
 
 });
 
