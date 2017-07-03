@@ -9,13 +9,14 @@
   font-size: 1rem;
   position: relative;
   width: 50%;
-  margin: 1em auto;
+  margin: 1em;
   text-align: left;
 }
 .geosuggest__input {
   width: 100%;
-  border: 2px solid transparent;
-  box-shadow: 0 0 1px #3d464d;
+  position: right;
+  /*border: 2px solid transparent;*/
+  /*box-shadow: 0 0 1px #3d464d;*/
   padding: .5em 1em;
   -webkit-transition: border 0.2s, box-shadow 0.2s;
           transition: border 0.2s, box-shadow 0.2s;
@@ -73,10 +74,7 @@
   font-weight: bold;
 }
 
-.activityinput {
-  font-family: 'Roboto', sans-serif;
-}
-.remove {
-  position: relative;
-  /*float: right*/
+.phone {
+  margin: 1em;
+  display: inline-flex;
 }

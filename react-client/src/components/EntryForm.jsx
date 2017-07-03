@@ -1,14 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Geosuggest from 'react-geosuggest';
-import styles from '../app.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Divider from 'material-ui/Divider';
+import AddEntryButton from './AddEntryButton.jsx';
+import AddressField from './AddressField.jsx';
+import PhoneNumberField from './PhoneNumberField.jsx';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
-import rrui from 'react-phone-number-input/rrui.css';
-import rpni from 'react-phone-number-input/style.css';
+import RemoveEntryButton from './RemoveFieldButton.jsx';
 
-class AddressSet extends React.Component {
+class EntrySet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +18,11 @@ class AddressSet extends React.Component {
       activity: '',
       name: ''
     };
-    this.handleAddressChange = this.handleAddressChange.bind(this);
-    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddAddress = this.handleAddAddress.bind(this);
+    this.handleActivityChange = this.handleActivityChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+
   }
 
   handleActivityChange(e) {
@@ -36,7 +38,6 @@ class AddressSet extends React.Component {
   }
 
   handleAddressChange(i, value) {
-    console.log(`i ${i} e ${value}`);
     let addresses = this.state.addresses.slice();
     addresses[i] = value;
     this.setState({
@@ -53,7 +54,6 @@ class AddressSet extends React.Component {
   }
 
   handleAddAddress() {
-    console.log('adding another address input field');
     this.setState({
       count: this.state.count + 1
     });
@@ -63,13 +63,11 @@ class AddressSet extends React.Component {
     let addresses = this.state.addresses.slice();
     let phoneNumbers = this.state.phoneNumbers.slice();
     phoneNumbers.splice(index, 1);
-    // console.log(`idx: ${index} value: ${addresses[index]}`);
     addresses.splice(index, 1);
     this.setState({
       count: this.state.count - 1,
       addresses,
       phoneNumbers
-
     });
   }
 
@@ -82,7 +80,7 @@ class AddressSet extends React.Component {
       if (isValidPhoneNumber(this.state.phoneNumbers[i]) === false) {
         alert(`Bad phone number for person #${i + 1}`);
         this.handlePhoneNumberChange(i, '');
-        throw 'error';
+        throw 'bad phone number';
       }
       people.push({
         address: this.state.addresses[i],
@@ -98,7 +96,6 @@ class AddressSet extends React.Component {
   }
 
   onSuggestSelect(i, suggest) {
-    // console.log(`${i} ${suggest.label}`);
     let addresses = this.state.addresses.slice();
     addresses[i] = suggest.label;
     this.setState({
@@ -106,63 +103,54 @@ class AddressSet extends React.Component {
     });
   }
 
-  createGeosuggest(i) {
-    return (
-      <Geosuggest
-        placeholder={`Address #${i + 1}`}
-        ref={el => this._geoSuggest = el}
-        onChange={this.handleAddressChange.bind(this, i)}
-        onSuggestSelect={this.onSuggestSelect.bind(this, i)}
-        initialValue={this.state.addresses[i] || ''}
-      />
-    );
-  }
-
-  createPhoneNumberField(i) {
-    return (
-      // <input 
-      //   type="text" 
-      //   value={this.state.phoneNumbers[i] || ''}
-      //   placeholder={`Phone Number #${i + 1}`}
-      //   onChange={this.handlePhoneNumberChange.bind(this, i)}
-      // />
-      <Phone 
-        placeholder={`Phone Number #${i + 1}`}
-        onChange={ phone => {
-          let phoneNumbers = this.state.phoneNumbers.slice();
-          phoneNumbers[i] = phone;
-          this.setState({
-            phoneNumbers
-          });
-        }}
-        value={this.state.phoneNumbers[i] || ''}
-        country="US"
-        />
-    );
-  }
-
-  createRemoveFieldButton(i) {
-    return (
-      <RaisedButton className="remove" label="Remove" onClick={this.handleRemoveEntry.bind(this, i)}/>
-    );
+  onPhoneChange(i, phone) {
+    let phoneNumbers = this.state.phoneNumbers.slice();
+    phoneNumbers[i] = phone;
+    this.setState({
+      phoneNumbers
+    });
   }
 
   createForm() {
+    // have it to make entries instead
     let formItems = [];
     for (var i = 0; i < this.state.count; i++) {
       if (i < 2) {
         formItems.push(
           <div key={i}>
-            {this.createGeosuggest(i)}
-            {this.createPhoneNumberField(i)}
+            <AddressField
+              i={i}
+              onChange={this.handleAddressChange.bind(this, i)}
+              // important to have the onSuggestSelect be the same prop name as from the Docs
+              onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+              initialValue={this.state.addresses[i] || ''} />
+            <PhoneNumberField
+              i={i}
+              value={this.state.phoneNumbers[i] || ''}
+              onChange={this.onPhoneChange.bind(this, i)}
+              />
+            <br></br>
+            <Divider />
+            <br></br>
           </div>
         );
       } else {
         formItems.push(
           <div key={i}>
-            {this.createGeosuggest(i)}
-            {this.createPhoneNumberField(i)}
-            {this.createRemoveFieldButton(i)}
+            <AddressField 
+              i={i}
+              onChange={this.handleAddressChange.bind(this, i)}
+              onSuggestSelect={this.onSuggestSelect.bind(this, i)}
+              initialValue={this.state.addresses[i] || ''} />
+            <RemoveEntryButton 
+              removeEntry={this.handleRemoveEntry.bind(this, i)} />
+            <PhoneNumberField 
+              i={i}
+              onChange={this.onPhoneChange.bind(this, i)}
+              value={this.state.phoneNumbers[i] || ''} />
+            <br></br>
+            <Divider />
+            <br></br>            
           </div>
         );
       }
@@ -173,18 +161,30 @@ class AddressSet extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}> 
-        <input type="text" placeholder="Enter Initiator Name" onChange={this.handleNameChange.bind(this)}/>
+        <AddEntryButton 
+          addEntry={this.handleAddAddress} />
+        <br></br>
+        <TextField 
+          hintText="What's your name?" 
+          onChange={this.handleNameChange.bind(this)} />
+        <br></br>
+        <Divider />
         {this.createForm()}
         <br></br>
         <br></br>
         <br></br>
-        <RaisedButton label="Add More Addresses" onClick={this.handleAddAddress.bind(this)} />
         <br></br>
-        <input type="text" placeholder="Enter Activity" onChange={this.handleActivityChange.bind(this)}/>
-        <RaisedButton type="submit" label="Submit" />
+        <span>
+          <TextField 
+            hintText="What type of place are you looking for?" 
+            onChange={this.handleActivityChange} />
+          <RaisedButton 
+            type="submit" 
+            label="Submit" />
+          </span>
       </form>
     );
   }
 }
 
-export default AddressSet;
+export default EntrySet;
