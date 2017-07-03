@@ -9,7 +9,7 @@ let GOOGLEKEY;
 if (process.env.GOOGLEKEY) {
   console.log('Using ENV keys')
   GOOGLEKEY = process.env.GOOGLEKEY;
-} else /* {
+} /* else {
   console.log('Using local keys')
   GOOGLEKEY = require('../keys').GOOGLEKEY;
 } */ //uncomment for local
