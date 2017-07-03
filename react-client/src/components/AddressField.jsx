@@ -6,8 +6,7 @@ const AddressField = ({i, onChange, onSuggestSelect, initialValue}) => (
     placeholder={`Address #${i + 1}`}
     onChange={onChange}
     onSuggestSelect={onSuggestSelect}
-    initialValue={initialValue}
-    />
+    initialValue={initialValue} />
 );
 
 export default AddressField;
