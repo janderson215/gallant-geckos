@@ -80,7 +80,7 @@ class EntrySet extends React.Component {
       if (isValidPhoneNumber(this.state.phoneNumbers[i]) === false) {
         alert(`Bad phone number for person #${i + 1}`);
         this.handlePhoneNumberChange(i, '');
-        throw 'error';
+        throw 'bad phone number';
       }
       people.push({
         address: this.state.addresses[i],
