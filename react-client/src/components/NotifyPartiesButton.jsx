@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const notifyPartiesButton = ({notifyParties}) => (
   <RaisedButton
-    label="Notify Friends"
+    label="Notify Parties"
     onClick={notifyParties}
   />
 );

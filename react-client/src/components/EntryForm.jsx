@@ -193,7 +193,7 @@ class EntrySet extends React.Component {
           <RaisedButton 
             type="submit" 
             label="Submit" />
-          <notifyPartiesButton 
+          <NotifyPartiesButton 
             notifyParties={this.notifyParties} />
           </span>
       </form>

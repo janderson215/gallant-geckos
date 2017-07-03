@@ -79,6 +79,7 @@ class App extends React.Component {
   }
 
   fetchPlaces() {
+    let that = this;
     $.ajax({
       method: 'GET',
       url: '/points-of-interest',
@@ -87,7 +88,7 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          this.setState({
+          that.setState({
             recommendedPlaces: data.pointsOfInterest
           });
         }
