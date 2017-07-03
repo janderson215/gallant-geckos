@@ -63,7 +63,11 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          this.fetchPlaces();
+          this.setState({
+            recommendedPlaces: data
+          }, function() {
+            this.fetchPlaces();
+          });
         }
       }
     });
@@ -88,14 +92,13 @@ class App extends React.Component {
   }
 
   notifyFriends(data) {
-    console.log(data);
     data.location = {
       name: this.state.FIND_OUT_NAME_FROM_PAUL,
       address: this.state.FIND_OUT_ADDRESS_FROM_PAUL
     };
     $.ajax({
       method: 'POST',
-      url: 'FIND OUT FROM JON',
+      url: '',
       data: data,
       error: function(err) {
         if (err) {
@@ -105,6 +108,11 @@ class App extends React.Component {
       success: function(data) {
         if (data) {
           console.log(`Successful POST: ${data}`);
+          this.setState({
+            
+          }, function() {
+            this.fetchPlaces();
+          })
         }
       }
     });
