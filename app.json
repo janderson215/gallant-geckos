@@ -4,11 +4,15 @@
   "scripts": {
   },
   "env": {
+    "dbfilepath": {"required": true},
+    "googleAPIkey": {"required": true},
+    "MONGODB_URI": {"required": true},
+    "TWILIOSID": {"required": true},
+    "TWILIOTOKEN": {"required": true}
   },
   "formation": {
   },
   "addons": [
-
   ],
   "buildpacks": [
     {
