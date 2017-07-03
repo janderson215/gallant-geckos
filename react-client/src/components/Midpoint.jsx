@@ -15,8 +15,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      recommendedPlaceIframe: this.handleDummyData(),
-      recommendedPlaces: dummy,
+      recommendedPlaceIframe: null,//this.handleDummyData(),
+      recommendedPlaces: null,//dummy,
       recommendedPlaceAddress: null,
       recommendedPlaceName: null,
       sessionID: null
@@ -34,8 +34,8 @@ class App extends React.Component {
 
   handleSelectResult (recommendedPlaceClick) {
     console.log('clicked on: ', recommendedPlaceClick.name);
-    let iframeLong = recommendedPlaceClick.iframe;
-    let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    let iframeLong = recommendedPlaceClick.iframe_string;
+    let iframeURL = iframeLong.slice(20, iframeLong.length - 12);
     console.log('passing into iframe: ', iframeURL);
     this.setState({
       recommendedPlaceIframe: `https:${iframeURL}`,
