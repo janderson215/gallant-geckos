@@ -12,8 +12,8 @@ if (process.env.MONGODB_URI) {
   console.log('---MONGODB_URI: ---', process.env.MONGODB_URI);
 }  
 
-mongoose.connect('mongodb://localhost/sessions'); // uncomment-out for local
-// mongoose.connect(dbfilepath); // uncomment-out for production
+// mongoose.connect('mongodb://localhost/sessions'); // uncomment-out for local
+mongoose.connect(dbfilepath); // uncomment-out for production
 // var db = mongoose.connection;    
 
 let saveSessionModel = ((data,res) => {
