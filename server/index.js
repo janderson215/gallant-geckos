@@ -74,50 +74,34 @@ app.post('/addresses', (req, res) => {
   })
   .then(() => {
     const nearbySearch = new Promise((resolve, reject) => {
-      let nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
-      rp(nearbySearchUrl)
-      .then(responseObject => {
-        responseObject = JSON.parse(responseObject);
-        if(responseObject.status === 'OK') {
-          console.log('pointsOfInterest set on 1st attempt');
-          resolve(responseObject.results);
-        } else if(responseObject.status === 'ZERO_RESULTS') {
-          nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${GOOGLEKEY}`
-          nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
-          console.log('Not able to sort by distance. Finding locations by radius.');
-          rp(nearbySearchUrl)
-          .then(responseObject2 => {
-            responseObject2 = JSON.parse(responseObject2);
-            if(responseObject2.status === 'OK') {
-              console.log('pointsOfInterest set on 2nd attempt');
-              resolve(responseObject2.results);
-            } else if (responseObject2.status === 'ZERO_RESULTS') {
-              radius = 50000;
-              nearbySearchUrlSuffix = `${currentMidpoint}&radius=${radius}&type=${type}&key=${GOOGLEKEY}`
-              nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
-              console.log(`Not able locate target establishment within ${radius/1000}km. Expanding radius.`);
-              rp(nearbySearchUrl)
-              .then(responseObject3 => {
-                responseObject3 = JSON.parse(responseObject3);
-                if(responseObject3.status === 'OK') {
-                  console.log('pointsOfInterest set on 3rd attempt');
-                  resolve(responseObject3.results);
-                } else {
-                  console.log('Error on Attempt 3:', responseObject3.status);
-                }
-              })
-              .catch(err => console.log('Caught error on Attempt 3:', err))
-            } else {
-              console.log('Error on Attempt 2:', responseObject2.status)
-            }
-          })
-          .catch(err => console.log('Caught error on Attempt 2: ', err))
-        } else {
-          console.log('Error on Attempt 1:', responseObject.status);
-        }
-      })
-      .catch(err => console.log('Nearby Search API error: ', err));
-    });
+      let attemptCounter = 1
+      let nearbySearchUrl;
+
+      const nearbySearchAPICall = () => {
+        nearbySearchUrlSuffix = searchByRadius ? `${currentMidpoint}&radius=${radius}&type=${type}&key=${GOOGLEKEY}` : nearbySearchUrlSuffix;
+        nearbySearchUrl = nearbySearchUrlPrefix.concat(nearbySearchUrlSuffix);
+        rp(nearbySearchUrl)
+        .then(responseObject => {
+          responseObject = JSON.parse(responseObject);
+          if (responseObject.status === 'OK') {
+            console.log(`pointsOfInterest set on attempt ${attemptCounter}`);
+            resolve(responseObject.results);
+          } else if (responseObject.status === 'ZERO_RESULTS') {
+            radius = radius ? radius * 2 : 1000;
+            attemptCounter++
+            searchByRadius = true;
+            console.log('No results found within ${radius/1000}km. Expanding radius…')
+            nearbySearchAPICall();
+          } else {
+            reject(responseObject);
+          }
+        })
+        .catch(err => console.log(err));
+      }
+
+      nearbySearchAPICall();
+    })
+    .catch(err => console.log(err));
 
     nearbySearch.then(nearbySearchResults => {
       pointsOfInterest = nearbySearchResults;
@@ -159,7 +143,7 @@ app.post('/addresses', (req, res) => {
 });
 
 //Return the Session document returned from the db query to the client
-app.get('/pointsOfInterest', (req, res) => {
+app.get('/points-of-interest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 
   let id = req.query.id;
@@ -167,7 +151,7 @@ app.get('/pointsOfInterest', (req, res) => {
 });
 
 //SMS all parties involved
-app.post('/notifyParties', (req, res) => {
+app.post('/notify-parties', (req, res) => {
   let initiatorName = req.body.initiatorName;
   let location = req.body.location;
   let phoneNums = req.body.phoneNums;
