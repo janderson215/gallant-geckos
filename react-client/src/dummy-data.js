@@ -1,4 +1,28 @@
- module.exports = [{
+ module.exports = {
+    "initiatorName": "Marcus",
+    "pointsOfInterest": [
+        {
+            "name": "The Storehouse",
+            "address": "451 Galvez Avenue #200, San Francisco",
+            "iframe_string": "<iframe src=\"https://www.google.com/maps/embed/v1/place?q=349+11th+ave,+san+francisco,+ca+94118&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0\"></iframe>",
+            "_id": "59588bf7ce1c34116257978c"
+        },
+        {
+            "name": "Pointe Cafe",
+            "address": "400 Oyster Point Boulevard # 131, South San Francisco",
+            "iframe_string": "<iframe src=\"https://www.google.com/maps/embed/v1/place?q=349+11th+ave,+san+francisco,+ca+94118&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0\"></iframe>",
+            "_id": "59588bf7ce1c34116257978b"
+        }
+    ],
+    "phoneNums": [
+        "+19545524394",
+        "+15302202557",
+        "+17275806025",
+        "+14156239347"
+    ]
+}
+
+/*[{
   geometry: { location: [Object], viewport: [Object] },
   icon: 'https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png',
   id: '14e1826f92d5be4a645ff5496157c56c546db8ba',
@@ -297,4 +321,4 @@
   vicinity: '142 Old County Road, Brisbane',
   iframe: '<iframe src="//www.google.com/maps/embed/v1/place?q=142%20Old%20County%20Road,%20Brisbane&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0"></iframe>'
 }];
-
+*/

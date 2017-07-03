@@ -16,17 +16,7 @@ class App extends React.Component {
     super(props);
     this.state = { 
       recommendedPlaceIframe: this.handleDummyData(),
-      recommendedPlaces: {
-          "initiatorName": "Marcus",
-          "pointsOfInterest": [
-              {
-                  "name": "",
-                  "address": "",
-                  "iframe_string": "",
-                  "_id": ""
-              }
-          ]
-      },//dummy,
+      recommendedPlaces: dummy.pointsOfInterest,
       recommendedPlaceAddress: null,
       recommendedPlaceName: null,
       sessionID: null
