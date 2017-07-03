@@ -11,9 +11,6 @@ import styles from '../app.css';
 import Paper from 'material-ui/Paper';
 import ResultsList from './ResultsList.jsx';
 
-
-
-// move paul's things in here
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +20,7 @@ class App extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectResult = this.handleSelectResult.bind(this);
+    this.notifyFriends = this.notifyFriends.bind(this);
   }
 
   componentDidMount () {
@@ -65,15 +63,52 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          
+          this.fetchPlaces();
+        }
+      }
+    });
+  }
+
+  fetchPlaces() {
+    $.ajax({
+      method: 'GET',
+      data: this.state.FIND_OUT_FROM_SOMEONE,
+      success: function(data) {
+        if (data) {
+          console.log(data);
+          // also update some state
+        }
+      },
+      error: function(err) {
+        if (err) {
+          console.log('err, ', err);
         }
       }
     });
   }
 
   notifyFriends(data) {
-    console.log('notifying friends');
     console.log(data);
+    data.location = {
+      name: this.state.FIND_OUT_NAME_FROM_PAUL,
+      address: this.state.FIND_OUT_ADDRESS_FROM_PAUL
+    };
+    $.ajax({
+      method: 'POST',
+      url: 'FIND OUT FROM JON',
+      data: data,
+      error: function(err) {
+        if (err) {
+          console.log(err);
+        }
+      },
+      success: function(data) {
+        if (data) {
+          console.log(`Successful POST: ${data}`);
+        }
+      }
+    });
+
   }
 
   render () {
