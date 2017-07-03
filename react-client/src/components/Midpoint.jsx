@@ -80,6 +80,7 @@ class App extends React.Component {
   fetchPlaces() {
     $.ajax({
       method: 'GET',
+      url: '/points-of-interest',
       data: {
         id: this.state.sessionID
       },
@@ -101,7 +102,7 @@ class App extends React.Component {
   notifyFriends(data) {
     $.ajax({
       method: 'POST',
-      url: '/notifyParties',
+      url: '/notify-parties',
       data: {
         initiatorName: this.state.data.initiatorName,
         location: {
