@@ -23,7 +23,7 @@ class App extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectResult = this.handleSelectResult.bind(this);
-    this.notifyFriends = this.notifyFriends.bind(this);
+    this.notifyParties = this.notifyParties.bind(this);
   }
 
   componentDidMount () {
@@ -100,7 +100,7 @@ class App extends React.Component {
     });
   }
 
-  notifyFriends(data) {
+  notifyParties(data) {
     $.ajax({
       method: 'POST',
       url: '/notify-parties',
@@ -133,7 +133,7 @@ class App extends React.Component {
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <EntrySet onSubmit={this.handleSubmit} notifyFriends={this.notifyFriends}/>
+              <EntrySet onSubmit={this.handleSubmit} notifyParties={this.notifyParties}/>
               <Iframe   
                 url={this.state.recommendedPlaceIframe}
                 width="450px"

@@ -1,11 +1,11 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const NotifyFriendsButton = ({notifyFriends}) => (
+const notifyPartiesButton = ({notifyParties}) => (
   <RaisedButton
     label="Notify Friends"
-    onClick={notifyFriends}
+    onClick={notifyParties}
   />
 );
 
-export default NotifyFriendsButton;
+export default notifyPartiesButton;
