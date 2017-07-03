@@ -5,8 +5,8 @@ const Recommendation = require('./index').recommendation;
 if (process.env.dbfilepath) {
   var dbfilepath = process.env.dbfilepath;
 // } else if (fs.existsSync('../keys.js')) {
-} else {
-  var dbfilepath = require('../keys.js').dbfilepath;
+// } else {
+//   var dbfilepath = require('../keys.js').dbfilepath;
 }
 
 
