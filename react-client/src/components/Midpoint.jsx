@@ -63,7 +63,7 @@ class App extends React.Component {
       error: function(err) {
         console.log(err);
       },
-      success: function(data, callback) {
+      success: function(data) {
         if (data) {
           
         }
