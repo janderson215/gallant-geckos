@@ -7,6 +7,7 @@ import AddressField from './AddressField.jsx';
 import PhoneNumberField from './PhoneNumberField.jsx';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import RemoveEntryButton from './RemoveFieldButton.jsx';
+import NotifyFriendsButton from './NotifyFriendsButton.jsx';
 
 class EntrySet extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class EntrySet extends React.Component {
     this.handleAddAddress = this.handleAddAddress.bind(this);
     this.handleActivityChange = this.handleActivityChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
-
+    this.notifyFriends = this.notifyFriends.bind(this);
   }
 
   handleActivityChange(e) {
@@ -111,6 +112,17 @@ class EntrySet extends React.Component {
     });
   }
 
+  notifyFriends(event) {
+    event.preventDefault();
+    console.log('form click notify friends');
+
+    var notificationData = {
+      phoneNumbers: this.state.phoneNumbers
+    };
+    // callback to adjust the parent state
+    this.props.notifyFriends(notificationData);
+  }
+
   createForm() {
     // have it to make entries instead
     let formItems = [];
@@ -181,6 +193,8 @@ class EntrySet extends React.Component {
           <RaisedButton 
             type="submit" 
             label="Submit" />
+          <NotifyFriendsButton 
+            notifyFriends={this.notifyFriends} />
           </span>
       </form>
     );

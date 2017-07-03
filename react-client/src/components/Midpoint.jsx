@@ -11,18 +11,19 @@ import styles from '../app.css';
 import Paper from 'material-ui/Paper';
 import ResultsList from './ResultsList.jsx';
 
-
-
-// move paul's things in here
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
       recommendedPlaceIframe: this.handleDummyData(),
-      recommendedPlaces: dummy
+      recommendedPlaces: dummy,
+      recommendedPlaceAddress: null,
+      recommendedPlaceName: null,
+      sessionID: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectResult = this.handleSelectResult.bind(this);
+    this.notifyFriends = this.notifyFriends.bind(this);
   }
 
   componentDidMount () {
@@ -37,7 +38,9 @@ class App extends React.Component {
     let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
     console.log('passing into iframe: ', iframeURL);
     this.setState({
-      recommendedPlaceIframe: `https:${iframeURL}`
+      recommendedPlaceIframe: `https:${iframeURL}`,
+      recommendedPlaceAddress: recommendedPlaceClick.address,
+      recommendedPlaceName: recommendedPlaceClick.name
     });
     console.log(this.state.recommendedPlaceIframe);
   } 
@@ -51,11 +54,11 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
+    let context = this;
     console.log(`the client has submitted "${(JSON.stringify(data))}"`);
     this.setState({
       data: data
     });
-    // make ajax calls
     $.ajax({
       url: '/addresses',
       method: 'POST',
@@ -65,11 +68,64 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          
+          context.setState({
+            sessionID: data
+          }, function() {
+            context.fetchPlaces();
+          });
         }
       }
     });
   }
+
+  fetchPlaces() {
+    $.ajax({
+      method: 'GET',
+      url: '/points-of-interest',
+      data: {
+        id: this.state.sessionID
+      },
+      success: function(data) {
+        if (data) {
+          this.setState({
+            recommendedPlaces: data.pointsOfInterest
+          });
+        }
+      },
+      error: function(err) {
+        if (err) {
+          console.log('err, ', err);
+        }
+      }
+    });
+  }
+
+  notifyFriends(data) {
+    $.ajax({
+      method: 'POST',
+      url: '/notify-parties',
+      data: {
+        initiatorName: this.state.data.initiator,
+        location: {
+          name: this.state.recommendedPlaceClick.name,
+          address: this.state.recommendedPlaceClick.address
+        },
+        phoneNums: data.phoneNumbers
+      },
+      error: function(err) {
+        if (err) {
+          console.log(err);
+        }
+      },
+      success: function(data) {
+        if (data) {
+          console.log('Parties notified');
+        }
+      }
+    });
+
+  }
+
 
   render () {
     return (
@@ -77,7 +133,7 @@ class App extends React.Component {
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <EntrySet onSubmit={this.handleSubmit} />
+              <EntrySet onSubmit={this.handleSubmit} notifyFriends={this.notifyFriends}/>
               <Iframe   
                 url={this.state.recommendedPlaceIframe}
                 width="450px"
