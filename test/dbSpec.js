@@ -41,7 +41,7 @@ sessionTest.save(function(err) {
 
 Session.find({}, function(err, sessions) {
   if (err) { return console.error('Error: ', err); }
-  console.log('sessions: ', sessions);
+  // console.log('sessions: ', sessions);
 });
 
 

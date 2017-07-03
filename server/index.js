@@ -86,7 +86,7 @@ app.post('/addresses', (req, res) => {
         .then(responseObject => {
           responseObject = JSON.parse(responseObject);
           if (responseObject.status === 'OK') {
-            console.log(`pointsOfInterest set on attempt ${attemptCounter}`);
+            // console.log(`pointsOfInterest set on attempt ${attemptCounter}`);
             resolve(responseObject.results);
           } else if (responseObject.status === 'ZERO_RESULTS') {
             radius = radius ? radius * 2 : 1000;
@@ -159,9 +159,9 @@ app.post('/notify-parties', (req, res) => {
   let phoneNums = req.body.phoneNums;
   let accountSid;
   let authToken;
-  if (process.env.twilioSid) {
-    accountSid = process.env.twilioSid;
-    authToken = process.env.twilioToken;
+  if (process.env.TWILIOSID) {
+    accountSid = process.env.TWILIOSID;
+    authToken = process.env.TWILIOTOKEN;
   } /*else {
     accountSid = require('../keys').TWILIOSID;
     authToken = require('../keys').TWILIOTOKEN;
