@@ -5,8 +5,8 @@ import Divider from 'material-ui/Divider';
 import AddEntryButton from './AddEntryButton.jsx';
 import AddressField from './AddressField.jsx';
 import PhoneNumberField from './PhoneNumberField.jsx';
-import isValidPhoneNumber from 'react-phone-number-input';
-import RemoveEntryButton from './RemoveField.jsx';
+import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
+import RemoveEntryButton from './RemoveFieldButton.jsx';
 
 
 
@@ -34,14 +34,12 @@ class EntrySet extends React.Component {
   }
 
   handleNameChange(e) {
-    console.log(e.target.value);
     this.setState({
       name: e.target.value
     });
   }
 
   handleAddressChange(i, value) {
-    // console.log(`i ${i} e ${value}`);
     let addresses = this.state.addresses.slice();
     addresses[i] = value;
     this.setState({
@@ -58,7 +56,6 @@ class EntrySet extends React.Component {
   }
 
   handleAddAddress() {
-    console.log('adding another address input field');
     this.setState({
       count: this.state.count + 1
     });
@@ -101,8 +98,6 @@ class EntrySet extends React.Component {
   }
 
   onSuggestSelect(i, suggest) {
-    console.log(suggest.label);
-    // console.log(`${i} ${suggest.label}`);
     let addresses = this.state.addresses.slice();
     addresses[i] = suggest.label;
     this.setState({
@@ -111,7 +106,6 @@ class EntrySet extends React.Component {
   }
 
   onPhoneChange(i, phone) {
-    console.log(phone);
     let phoneNumbers = this.state.phoneNumbers.slice();
     phoneNumbers[i] = phone;
     this.setState({
