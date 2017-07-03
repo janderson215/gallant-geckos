@@ -13,7 +13,7 @@ const ResultsListEntry = (props) => (
       {props.recommendedPlace.address}
     </div>
     <img className="media-right recommended-image" 
-      onClick={() => props.handleSelectResult(props.recommendedPlace)}>
+      onClick={() => props.handleSelectResult(props.recommendedPlace)}
       src={props.recommendedPlace.photo_url}
     />
   </div>
