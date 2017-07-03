@@ -109,8 +109,8 @@ class App extends React.Component {
       data: {
         initiatorName: that.state.data.initiator,
         location: {
-          name: that.state.recommendedPlaceClick.name,
-          address: that.state.recommendedPlaceClick.address
+          name: that.state.recommendedPlaceName,
+          address: that.state.recommendedPlaceAddress
         },
         phoneNums: data.phoneNumbers
       },
