@@ -54,11 +54,11 @@ class App extends React.Component {
   }
 
   handleSubmit (data) {
+    let context = this;
     console.log(`the client has submitted "${(JSON.stringify(data))}"`);
     this.setState({
       data: data
     });
-    // make ajax calls
     $.ajax({
       url: '/addresses',
       method: 'POST',
@@ -68,10 +68,10 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          this.setState({
+          context.setState({
             sessionID: data
           }, function() {
-            this.fetchPlaces();
+            context.fetchPlaces();
           });
         }
       }
