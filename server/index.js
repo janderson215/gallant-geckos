@@ -167,7 +167,7 @@ app.get('/pointsOfInterest', (req, res) => {
 });
 
 //SMS all parties involved
-app.post('/notifyFriends', (req, res) => {
+app.post('/notifyParties', (req, res) => {
   let initiatorName = req.body.initiatorName;
   let location = req.body.location;
   let phoneNums = req.body.phoneNums;
