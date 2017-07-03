@@ -16,7 +16,9 @@ class App extends React.Component {
     super(props);
     this.state = { 
       recommendedPlaceIframe: this.handleDummyData(),
-      recommendedPlaces: dummy
+      recommendedPlaces: dummy,
+      recommendedPlaceAddress: null,
+      sessionID: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectResult = this.handleSelectResult.bind(this);
@@ -35,7 +37,9 @@ class App extends React.Component {
     let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
     console.log('passing into iframe: ', iframeURL);
     this.setState({
-      recommendedPlaceIframe: `https:${iframeURL}`
+      recommendedPlaceIframe: `https:${iframeURL}`,
+      recommendedPlaceAddress: recommendedPlaceClick.address,
+      recommendedPlaceName: recommendedPlaceClick.name
     });
     console.log(this.state.recommendedPlaceIframe);
   } 
@@ -64,7 +68,7 @@ class App extends React.Component {
       success: function(data) {
         if (data) {
           this.setState({
-            recommendedPlaces: data
+            sessionID: data
           }, function() {
             this.fetchPlaces();
           });
@@ -76,11 +80,14 @@ class App extends React.Component {
   fetchPlaces() {
     $.ajax({
       method: 'GET',
-      data: this.state.FIND_OUT_FROM_SOMEONE,
+      data: {
+        id: this.state.sessionID
+      },
       success: function(data) {
         if (data) {
-          console.log(data);
-          // also update some state
+          this.setState({
+            recommendedPlaces: data.pointsOfInterest
+          });
         }
       },
       error: function(err) {
@@ -92,14 +99,17 @@ class App extends React.Component {
   }
 
   notifyFriends(data) {
-    data.location = {
-      name: this.state.FIND_OUT_NAME_FROM_PAUL,
-      address: this.state.FIND_OUT_ADDRESS_FROM_PAUL
-    };
     $.ajax({
       method: 'POST',
-      url: '',
-      data: data,
+      url: '/notifyParties',
+      data: {
+        initiatorName: this.state.data.initiatorName,
+        location: {
+          name: this.state.recommendedPlaceClick.name,
+          address: this.state.recommendedPlaceClick.address
+        },
+        phoneNums: data.phoneNumbers
+      },
       error: function(err) {
         if (err) {
           console.log(err);
@@ -107,12 +117,7 @@ class App extends React.Component {
       },
       success: function(data) {
         if (data) {
-          console.log(`Successful POST: ${data}`);
-          this.setState({
-            
-          }, function() {
-            this.fetchPlaces();
-          })
+          console.log('Parties notified');
         }
       }
     });

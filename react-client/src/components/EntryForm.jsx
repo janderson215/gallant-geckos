@@ -117,8 +117,7 @@ class EntrySet extends React.Component {
     console.log('form click notify friends');
 
     var notificationData = {
-      phoneNumbers: this.state.phoneNumbers,
-      initiator: this.state.name
+      phoneNumbers: this.state.phoneNumbers
     };
     // callback to adjust the parent state
     this.props.notifyFriends(notificationData);
