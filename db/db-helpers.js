@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Session = require('./index').session;
 const Recommendation = require('./index').recommendation;
+var dbfilepath;
 if (process.env.dbfilepath) {
-  var dbfilepath = process.env.dbfilepath;
+  dbfilepath = process.env.dbfilepath;
 }
-
 console.log('---dbfilepath from process.env: ---', dbfilepath);
-// console.log('---MONGODB_URI: ---', MONGODB_URI);
+
+if (process.env.MONGODB_URI) {
+  dbfilepath = process.env.MONGODB_URI;
+}  
+console.log('---MONGODB_URI: ---', process.env.MONGODB_URI);
 
 // mongoose.connect('mongodb://localhost/sessions'); // uncomment-out for local
 mongoose.connect(dbfilepath); // uncomment-out for production
