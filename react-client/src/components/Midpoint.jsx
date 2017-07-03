@@ -9,19 +9,40 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import styles from '../app.css';
 import Paper from 'material-ui/Paper';
+import ResultsList from './ResultsList.jsx';
+
 
 
 // move paul's things in here
-class Midpoint extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      iframe: this.handleDummyData(),
-      data: null
+      recommendedPlaceIframe: this.handleDummyData(),
+      recommendedPlaces: dummy
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSelectResult = this.handleSelectResult.bind(this);
   }
 
-  handleDummyData() {
+  componentDidMount () {
+    this.setState({
+      recommendedPlaceIframe: 'https://www.google.com/maps/embed/v1/place?q=110%20Robinson%20Street,%20San%20Francisco&zoom=17&key=AIzaSyD7Hq8ejGKI9t3JIbnfz2myKOScIY5lnq0'
+    });
+  }
+
+  handleSelectResult (recommendedPlaceClick) {
+    console.log('clicked on: ', recommendedPlaceClick.name);
+    let iframeLong = recommendedPlaceClick.iframe;
+    let iframeURL = iframeLong.slice(13, iframeLong.length - 11);
+    console.log('passing into iframe: ', iframeURL);
+    this.setState({
+      recommendedPlaceIframe: `https:${iframeURL}`
+    });
+    console.log(this.state.recommendedPlaceIframe);
+  } 
+
+  handleDummyData () {
     let data = dummy[0].iframe.toString();
     console.log(data);
     let url = data.slice(13, (data.length - 11));
@@ -50,26 +71,27 @@ class Midpoint extends React.Component {
     });
   }
 
-
   render () {
-    console.log('First Render');
     return (
       <MuiThemeProvider>
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <EntrySet onSubmit={this.handleSubmit.bind(this)}/>
-              <Iframe url={this.state.iframe}
+              <EntrySet onSubmit={this.handleSubmit} />
+              <Iframe   
+                url={this.state.recommendedPlaceIframe}
                 width="450px"
                 height="450px"
                 display="initial"
-                position="relative"
-                />
+                position="relative" />
           </span>
+        <ResultsList
+          handleSelectResult={this.handleSelectResult}
+          recommendedPlaces={this.state.recommendedPlaces} />
         </Paper>
       </MuiThemeProvider>
     );
   }
 }
 
-export default Midpoint;
+export default App;

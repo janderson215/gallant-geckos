@@ -8,8 +8,6 @@ import PhoneNumberField from './PhoneNumberField.jsx';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import RemoveEntryButton from './RemoveFieldButton.jsx';
 
-
-
 class EntrySet extends React.Component {
   constructor(props) {
     super(props);
