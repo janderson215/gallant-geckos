@@ -9,6 +9,9 @@ if (process.env.dbfilepath) {
 //   var dbfilepath = require('../keys.js').dbfilepath;
 }
 
+console.log('---dbfilepath from process.env: ---', dbfilepath);
+console.log('---MONGODB_URI: ---', MONGODB_URI);
+
 
 mongoose.connect(dbfilepath);
 var db = mongoose.connection;
