@@ -9,7 +9,7 @@ let GOOGLEKEY;
 if (process.env.GOOGLEKEY) {
   console.log('Using ENV keys')
   GOOGLEKEY = process.env.GOOGLEKEY;
-} /*else {
+} else /* {
   console.log('Using local keys')
   GOOGLEKEY = require('../keys').GOOGLEKEY;
 } */ //uncomment for local
@@ -158,7 +158,7 @@ app.post('/addresses', (req, res) => {
   });
 });
 
-//Return the Session ocument returned from the db query to the client
+//Return the Session document returned from the db query to the client
 app.get('/pointsOfInterest', (req, res) => {
   console.log('Pulling POIs by Session ID');
 

@@ -39,10 +39,6 @@ sessionTest.save(function(err) {
   console.log('sessionTest saved');
 });
 
-recommendResult.save(function(err) {
-  if (err) { return console.error('Error: ', err); }
-  console.log('sessionTest saved');
-});
 Session.find({}, function(err, sessions) {
   if (err) { return console.error('Error: ', err); }
   console.log('sessions: ', sessions);
