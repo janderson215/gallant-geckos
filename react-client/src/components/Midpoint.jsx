@@ -46,7 +46,7 @@ class App extends React.Component {
   } 
 
   handleDummyData () {
-    let data = dummy[0].pointsOfInterest.iframe_string.toString();
+    let data = dummy.pointsOfInterest[0].iframe_string.toString();
     console.log(data);
     let url = data.slice(20, (data.length - 12));
     console.log(`https:${url}`);
