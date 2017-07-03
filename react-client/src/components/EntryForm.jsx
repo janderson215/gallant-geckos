@@ -7,7 +7,7 @@ import AddressField from './AddressField.jsx';
 import PhoneNumberField from './PhoneNumberField.jsx';
 import Phone, {isValidPhoneNumber} from 'react-phone-number-input';
 import RemoveEntryButton from './RemoveFieldButton.jsx';
-import notifyPartiesButton from './notifyPartiesButton.jsx';
+import NotifyPartiesButton from './NotifyPartiesButton.jsx';
 
 class EntrySet extends React.Component {
   constructor(props) {
