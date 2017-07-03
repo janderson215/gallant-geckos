@@ -12,7 +12,7 @@ if (process.env.GOOGLEKEY) {
 } /* else {
   console.log('Using local keys')
   GOOGLEKEY = require('../keys').GOOGLEKEY;
-} */ //uncomment for local
+} //*/ //uncomment for local
 
 const app = express();
 
@@ -74,7 +74,7 @@ app.post('/addresses', (req, res) => {
   })
   .then(() => {
     let searchByRadius = false;
-    
+
     const nearbySearch = new Promise((resolve, reject) => {
       let attemptCounter = 1
       let nearbySearchUrl;
@@ -110,7 +110,7 @@ app.post('/addresses', (req, res) => {
 
       pointsOfInterest.forEach(pointOfInterest => {
         pointOfInterest.address = pointOfInterest.vicinity;
-        pointOfInterest.iframe_string = `${iframePrefix.concat(address)}&zoom=17&key=${GOOGLEKEY}"></iframe>`;
+        pointOfInterest.iframe_string = `${iframePrefix.concat(pointOfInterest.address.split(' ').join('+'))}&zoom=17&key=${GOOGLEKEY}"></iframe>`;
         if (pointOfInterest.photos) {
           photoUrlSuffix = pointOfInterest.photos[0].photo_reference;
           pointOfInterest.photo_url = photoUrlPrefix.concat(photoUrlSuffix, `&key=${GOOGLEKEY}`);
