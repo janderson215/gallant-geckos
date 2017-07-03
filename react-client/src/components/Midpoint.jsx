@@ -71,13 +71,18 @@ class App extends React.Component {
     });
   }
 
+  notifyFriends(data) {
+    console.log('notifying friends');
+    console.log(data);
+  }
+
   render () {
     return (
       <MuiThemeProvider>
         <Paper zDepth={1}>
           <span>
             <AppBar title="Midpoint" showMenuIconButton={false} />
-              <EntrySet onSubmit={this.handleSubmit} />
+              <EntrySet onSubmit={this.handleSubmit} notifyFriends={this.notifyFriends}/>
               <Iframe   
                 url={this.state.recommendedPlaceIframe}
                 width="450px"
