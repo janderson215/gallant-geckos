@@ -12,7 +12,7 @@ if (process.env.GOOGLEKEY) {
 } /* else {
   console.log('Using local keys')
   GOOGLEKEY = require('../keys').GOOGLEKEY;
-} //*/ //uncomment for local
+} // */ //uncomment for local
 
 const app = express();
 
@@ -162,12 +162,12 @@ app.post('/notify-parties', (req, res) => {
   if (process.env.twilioSid) {
     accountSid = process.env.twilioSid;
     authToken = process.env.twilioToken;
-  } else {
-    accountSid = require('../keys').twilioSid;
-    authToken = require('../keys').twilioToken;
-  }
+  } /* else {
+    accountSid = require('../keys').TWILIOSID;
+    authToken = require('../keys').TWILIOTOKEN;
+  } // */
   const client = require('twilio')(accountSid, authToken);
-  const messageBody = `${initiatorName} wants to meet you at ${location.name}. The address is ${location.address}` //
+  const messageBody = `${initiatorName} wants to meet you at ${location.name}. The address is ${location.address}`;
 
   phoneNums.forEach(phoneNum => {
     client.messages.create({
@@ -175,7 +175,7 @@ app.post('/notify-parties', (req, res) => {
       from: '+19549457351',
       body: messageBody
     }, (err, message) => {
-      err ? res.status(500).send() : res.status(201).send(message.sid)
+      err ? res.status(500).send(err) : res.status(201).send(message.sid)
     });
   })
 
