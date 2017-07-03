@@ -86,7 +86,7 @@ app.post('/addresses', (req, res) => {
         .then(responseObject => {
           responseObject = JSON.parse(responseObject);
           if (responseObject.status === 'OK') {
-            console.log(`pointsOfInterest set on attempt ${attemptCounter}`);
+            // console.log(`pointsOfInterest set on attempt ${attemptCounter}`);
             resolve(responseObject.results);
           } else if (responseObject.status === 'ZERO_RESULTS') {
             radius = radius ? radius * 2 : 1000;
