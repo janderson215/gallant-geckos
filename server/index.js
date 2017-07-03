@@ -73,6 +73,8 @@ app.post('/addresses', (req, res) => {
     nearbySearchUrlSuffix = `${currentMidpoint}&rankby=distance&type=${type}&key=${GOOGLEKEY}`;
   })
   .then(() => {
+    let searchByRadius = false;
+    
     const nearbySearch = new Promise((resolve, reject) => {
       let attemptCounter = 1
       let nearbySearchUrl;
