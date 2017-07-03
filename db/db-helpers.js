@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 const Session = require('./index').session;
 const Recommendation = require('./index').recommendation;
+// const fs = require('fs');
+if (process.env.dbfilepath) {
+  var dbfilepath = process.env.dbfilepath;
+// } else if (fs.existsSync('../keys.js')) {
+// } else {
+//   var dbfilepath = require('../keys.js').dbfilepath;
+}
+// test
 
-mongoose.connect('mongodb://localhost/sessions');
+console.log('---dbfilepath from process.env: ---', dbfilepath);
+// console.log('---MONGODB_URI: ---', MONGODB_URI);
+
+
+mongoose.connect(dbfilepath);
 var db = mongoose.connection;
 
 let saveSessionModel = ((data,res) => {

@@ -1,12 +1,20 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-//const io = require('socket.io')(express);
+// const fs = require('fs');
+// const io = require('socket.io')(express);
 const parseUrl = require('url-parse');
 const request = require('request');
 const rp = require('request-promise-native');
-//const googleAPIkey = process.env.googleAPIkey ? process.env.googleAPIkey : require('src/key.js').googleAPIkey ? require('src/key.js').googleAPIkey : require('../keys');
-const googleAPIkey = process.env.googleAPIkey // || require('../keys') || require('src/key.js').googleAPIkey;
 const db = require('../db/db-helpers');
+if (process.env.googleAPIkey) {
+  var googleAPIkey = process.env.googleAPIkey;
+// } else if (fs.existsSync('../keys')) {
+// } else if (require('../keys')) {
+  // var googleAPIkey = require('../keys').googleAPIkey;
+// } else if (fs.existsSync('src/key')) {
+// } else {
+  // var googleAPIkey = require('src/key').googleAPIkey;
+}
 
 const app = express();
 
