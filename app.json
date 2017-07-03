@@ -8,7 +8,8 @@
     "googleAPIkey": {"required": true},
     "MONGODB_URI": {"required": true},
     "TWILIOSID": {"required": true},
-    "TWILIOTOKEN": {"required": true}
+    "TWILIOTOKEN": {"required": true},
+    "GOOGLEKEY": {"required": true}
   },
   "formation": {
   },
