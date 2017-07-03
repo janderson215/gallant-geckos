@@ -120,6 +120,7 @@ class EntrySet extends React.Component {
       phoneNumbers: this.state.phoneNumbers,
       initiator: this.state.name
     };
+    // callback to adjust the parent state
     this.props.notifyFriends(notificationData);
   }
 
