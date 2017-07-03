@@ -125,6 +125,48 @@ class App extends React.Component {
 
   }
 
+  fetchPlaces() {
+    $.ajax({
+      method: 'GET',
+      data: this.state.FIND_OUT_FROM_SOMEONE,
+      success: function(data) {
+        if (data) {
+          console.log(data);
+          // also update some state
+        }
+      },
+      error: function(err) {
+        if (err) {
+          console.log('err, ', err);
+        }
+      }
+    });
+  }
+
+  notifyFriends(data) {
+    console.log(data);
+    data.location = {
+      name: this.state.FIND_OUT_NAME_FROM_PAUL,
+      address: this.state.FIND_OUT_ADDRESS_FROM_PAUL
+    };
+    $.ajax({
+      method: 'POST',
+      url: 'FIND OUT FROM JON',
+      data: data,
+      error: function(err) {
+        if (err) {
+          console.log(err);
+        }
+      },
+      success: function(data) {
+        if (data) {
+          console.log(`Successful POST: ${data}`);
+        }
+      }
+    });
+
+  }
+
   render () {
     return (
       <MuiThemeProvider>
