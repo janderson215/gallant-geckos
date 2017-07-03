@@ -35,7 +35,7 @@ class App extends React.Component {
   handleSelectResult (recommendedPlaceClick) {
     console.log('clicked on: ', recommendedPlaceClick.name);
     let iframeLong = recommendedPlaceClick.iframe_string;
-    let iframeURL = iframeLong.slice(20, iframeLong.length - 12);
+    let iframeURL = iframeLong.slice(19, iframeLong.length - 11);
     console.log('passing into iframe: ', iframeURL);
     this.setState({
       recommendedPlaceIframe: `https:${iframeURL}`,
@@ -48,7 +48,7 @@ class App extends React.Component {
   handleDummyData () {
     let data = dummy.pointsOfInterest[0].iframe_string.toString();
     console.log(data);
-    let url = data.slice(20, (data.length - 12));
+    let url = data.slice(19, (data.length - 11));
     console.log(`https:${url}`);
     return `https:${url}`;
   }
