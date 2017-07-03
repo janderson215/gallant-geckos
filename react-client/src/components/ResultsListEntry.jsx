@@ -8,8 +8,8 @@ const ResultsListEntry = (props) => (
          onClick={() => props.handleSelectResult(props.recommendedPlace)}
       >{props.recommendedPlace.name}
     </div>
-    <div className="info-left recommended-address">{props.recommendedPlace.vicinity}</div>
-    <img className="media-right recommended-image" src={props.recommendedPlace.icon} />
+    <div className="info-left recommended-address">{props.recommendedPlace.address}</div>
+    <img className="media-right recommended-image" src={props.recommendedPlace.photo_url} />
   </div>
 );
 
